@@ -1,0 +1,19 @@
+<nb-card>
+    <nb-card-header>
+        <nb-actions>
+            <nb-action>
+                <label>{{(cityService.city$ |async)?.name}}</label>
+            </nb-action>
+            <nb-action>
+                <label class="label">Stacja pomiarowa :</label> 
+                <nb-select (selectedChange)="loadSensors($event)">
+                    <nb-option *ngFor="let station of (cityService.city$ |async)?.stations"
+                     [value]="station?.id" >{{station?.stationName}}</nb-option>
+                </nb-select>
+            </nb-action>
+        </nb-actions>
+    </nb-card-header>
+    <nb-card-body>
+        
+    </nb-card-body>
+</nb-card>
