@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.DTOs;
+using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,12 @@ namespace API.Controllers
             var stationState = await _unitOfWork.StationRepository.GetStationState(stationId);
 
             return await Task.FromResult(stationState);
+        }
+
+        [HttpGet("norms")]
+        public async Task<ICollection<Norm>> GetNorms()
+        {
+            return await _unitOfWork.SensorRepository.GetNormsAsync();
         }
     }
 }

@@ -20,9 +20,8 @@ export class CityService {
 
   constructor(private http: HttpClient, private stationService: StationService) { }
 
-  getCity(cityName: string){
-    
-   this.http.get(this.apiUrl + 'city?cityName='+cityName).subscribe((response: City) => {
+  getCity(cityName: string) {  
+    this.http.get(this.apiUrl + 'city?cityName='+cityName).subscribe((response: City) => {
     this.citySource.next(response);
   });
   

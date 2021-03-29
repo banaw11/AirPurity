@@ -4,5 +4,6 @@ export interface StationData{
     id: number,
     paramName: string,
     paramCode: string,
-    values: Measure
+    values: Measure[],
+    percents?: number
 }

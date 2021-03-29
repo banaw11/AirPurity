@@ -1,19 +1,56 @@
 <nb-card>
     <nb-card-header>
         <nb-actions>
+            <nb-action *ngIf="flipped" icon="arrow-circle-left-outline" (click)="flipped = false"></nb-action>
             <nb-action>
-                <label>{{(cityService.city$ |async)?.name}}</label>
-            </nb-action>
-            <nb-action>
-                <label class="label">Stacja pomiarowa :</label> 
-                <nb-select (selectedChange)="loadSensors($event)">
-                    <nb-option *ngFor="let station of (cityService.city$ |async)?.stations"
-                     [value]="station?.id" >{{station?.stationName}}</nb-option>
-                </nb-select>
+                <h5>{{(cityService.city$ |async)?.name}}</h5></nb-action>
+            <nb-action *ngIf="station?.stationState">
+                <button nbButton outline shape="round"
+                [status]='getIndexLevel() < 3 ? "success": getIndexLevel() < 5 ? "warning" : "danger"'>{{'Stan '+getStationState()}}</button>
             </nb-action>
         </nb-actions>
     </nb-card-header>
     <nb-card-body>
-        
+        <nb-flip-card [showToggleButton]='false' [flipped]="flipped">
+            <nb-card-front>
+                <nb-card>
+                    <nb-accordion>
+                        <nb-accordion-item *ngFor="let station of (stations$ |async)">
+                            <nb-accordion-item-header>
+                                <button nbButton outline (click)="loadSensors(station.id)">
+                                    {{station.stationName}}
+                                </button>
+                            </nb-accordion-item-header>
+                            <nb-accordion-item-body>{{station.addressStreet}}</nb-accordion-item-body>
+                        </nb-accordion-item>
+                    </nb-accordion>
+                </nb-card>
+            </nb-card-front>
+            <nb-card-back>
+                <nb-card>
+                    <nb-accordion  *ngFor="let data of stationsData" >
+                        <nb-accordion-item *ngIf="data.values.length > 0" >
+                            <nb-accordion-item-header>
+                            <label>{{data.paramCode}}</label>  
+                            <p>{{data.paramName}}</p>  
+                            <circle-progress
+                            [percent]='data.percents'
+                            [outerStrokeColor]='data.percents < 34 ? "#77ff00" : data.percents > 80 ? "#ff0000" : "#ffee00"'
+                            [animation]='true'>
+                            </circle-progress>
+                            <label class="label">{{data.values[0].value | number}} µg/m³</label>
+                            </nb-accordion-item-header>
+                            <nb-accordion-item-body>
+                                <label class="label">Czas pomiaru {{data.values[0].dateFormat | date:'d/M/yyyy HH:mm'}}</label>
+                                <p>Norma dla {{data.paramCode}} wynosi {{getNorm(data.paramCode)}}µg/m³</p>
+                            </nb-accordion-item-body>
+                        </nb-accordion-item>
+                    </nb-accordion>
+                </nb-card>
+                <nb-card>
+                    
+                </nb-card>
+            </nb-card-back>
+        </nb-flip-card>
     </nb-card-body>
 </nb-card>

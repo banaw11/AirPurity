@@ -9,6 +9,7 @@ namespace API.Data
         {
         }
 
+        public DbSet<Norm> Norms { get; set; }
         public DbSet<Commune> Communes { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Station> Stations { get; set; }
@@ -16,6 +17,9 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Norm>()
+                .HasKey(x => x.ParamCode);
 
             builder.Entity<Commune>()
                 .HasKey(x => new { x.CommuneName, x.DistrictName});

@@ -1,6 +1,9 @@
-﻿using API.DTOs;
+﻿using API.Data;
+using API.DTOs;
+using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +15,18 @@ namespace API.Repositories
     {
         private readonly IExternalClientContext _clientContext;
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public SensorRepository(IExternalClientContext clientContext, IMapper mapper)
+        public SensorRepository(IExternalClientContext clientContext, IMapper mapper, DataContext context)
         {
             _clientContext = clientContext;
             _mapper = mapper;
+            _context = context;
+        }
+
+        public async Task<ICollection<Norm>> GetNormsAsync()
+        {
+            return await _context.Norms.ToListAsync();
         }
 
         public async Task<ICollection<SensorDTO>> GetSensors(int stationId)

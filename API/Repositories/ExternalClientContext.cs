@@ -8,6 +8,7 @@ using API.Entities;
 using System.Text.Json;
 using API.Interfaces;
 using API.DTOs;
+using System.Linq;
 
 namespace API.Repositories
 {
@@ -25,7 +26,7 @@ namespace API.Repositories
         public async Task<ICollection<MeasureDTO>> GetMeasures(int sensorId)
         {
             var measureData = await _client.GetFromJsonAsync<MeasureDataDTO>("data/getData/" + sensorId);
-            return measureData.Values;
+            return measureData.Values.Where(x => x.Value != null).ToList();
         }
 
         public async Task<ICollection<SensorDTO>> GetSensorsAsync(int stationId)

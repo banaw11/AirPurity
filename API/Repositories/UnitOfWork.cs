@@ -22,7 +22,7 @@ namespace API.Repositories
         }
 
         public IStationRepository StationRepository => new StationRepository(_context, _clientContext, _mapper);
-        public ISensorRepository SensorRepository => new SensorRepository(_clientContext, _mapper);
+        public ISensorRepository SensorRepository => new SensorRepository(_clientContext, _mapper, _context);
         public ICityRepository CityRepository => new CityRepository(_context, _mapper);
     }
 }

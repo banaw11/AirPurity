@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CityService } from './services/city.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'client';
+  title = 'AirPurity';
+  constructor(private cityService: CityService){
+    this.cityService.getCity("Poznań");
+  }
 }

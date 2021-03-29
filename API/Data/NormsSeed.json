@@ -1,0 +1,30 @@
+﻿[
+  {
+    "ParamCode": "SO2",
+    "ParamNorm": 350
+  },
+  {
+    "ParamCode": "NO2",
+    "ParamNorm": 200
+  },
+  {
+    "ParamCode": "CO",
+    "ParamNorm": 10000
+  },
+  {
+    "ParamCode": "PM10",
+    "ParamNorm": 50
+  },
+  {
+    "ParamCode": "PM2.5",
+    "ParamNorm": 25
+  },
+  {
+    "ParamCode": "O3",
+    "ParamNorm": 180
+  },
+  {
+    "ParamCode": "C6H6",
+    "ParamNorm": 5
+  }
+]

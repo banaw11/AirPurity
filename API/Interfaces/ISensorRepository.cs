@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace API.Interfaces
     {
         Task<ICollection<SensorDataDTO>> GetSensorsData(int stationId);
         Task<ICollection<SensorDTO>> GetSensors(int stationId);
+        Task<ICollection<Norm>> GetNormsAsync();
     }
 }
