@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbCardModule ,NbActionsModule, NbSelectModule, NbAccordionModule, NbButtonModule, NbIconModule,
 NbInputModule } from '@nebular/theme';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { DatePipe } from '@angular/common';
@@ -13,15 +14,12 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CityComponent } from './components/city/city.component';
 import {HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-measures-chart.component';
-import { GoogleMapsModule } from '@angular/google-maps';
-import { MapComponent } from './modules/map/map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CityComponent,
-    PmMeasuresChartComponent,
-    MapComponent
+    PmMeasuresChartComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +28,7 @@ import { MapComponent } from './modules/map/map.component';
     HttpClientModule,
     HttpClientJsonpModule,
     BrowserAnimationsModule,
-    NbThemeModule.forRoot({ name: 'default' }),
+    NbThemeModule.forRoot({ name: 'cosmic' }),
     NbLayoutModule,
     NbEvaIconsModule,
     NbCardModule,
@@ -48,12 +46,14 @@ import { MapComponent } from './modules/map/map.component';
       showSubtitle: false,
       titleFontSize: '10',
       titleFontWeight: '700',
+      titleColor:'',
+      unitsColor:'',
       imageHeight:50,
       imageWidth:50
 
     }),
     ChartsModule,
-    GoogleMapsModule
+    FlexLayoutModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
