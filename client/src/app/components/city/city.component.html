@@ -46,9 +46,10 @@
                             </nb-accordion-item-body>
                         </nb-accordion-item>
                     </nb-accordion>
+                    <app-map></app-map>
                 </nb-card>
-                <nb-card>
-                    
+                <nb-card *ngIf="stationsData">
+                    <app-pm-measures-chart [pm10Data]='getPM10Data()' [pm25Data]='getPM25Data()' style="width: 80vh; height: 80vh;"></app-pm-measures-chart>
                 </nb-card>
             </nb-card-back>
         </nb-flip-card>

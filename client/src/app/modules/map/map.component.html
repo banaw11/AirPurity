@@ -1,0 +1,8 @@
+<ng-container *ngIf="apiLoaded | async">
+    <google-map height="400px"
+    width="750px"
+    [center]="center"
+    [zoom]="zoom"
+    (mapClick)="moveMap($event)"
+    ></google-map>
+</ng-container>

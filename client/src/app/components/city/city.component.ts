@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { City } from 'src/app/models/city';
+import { Measure } from 'src/app/models/measure';
 import { Norm } from 'src/app/models/norm';
 import { Station } from 'src/app/models/station';
 import { StationData } from 'src/app/models/stationData';
@@ -72,6 +73,14 @@ export class CityComponent implements OnInit {
 
   getIndexLevel(): number{
     return this.station.stationState.stIndexLevel.id;
+  }
+
+  getPM10Data():Measure[]{
+    return this.stationsData.find(x => x.paramCode == "PM10").values;
+  }
+
+  getPM25Data():Measure[]{
+    return this.stationsData.find(x => x.paramCode == "PM2.5").values;
   }
 
 }
