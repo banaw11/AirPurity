@@ -25,6 +25,6 @@ namespace API.DTOs
                );
             } 
         }
-        public decimal? Value { get; set; }
+        public double? Value { get; set; }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace API.Data.Migrations
+namespace API.Migrations
 {
-    public partial class FirstEntitiesCreate : Migration
+    public partial class PostgresInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,9 +11,9 @@ namespace API.Data.Migrations
                 name: "Communes",
                 columns: table => new
                 {
-                    CommuneName = table.Column<string>(type: "TEXT", nullable: false),
-                    DistrictName = table.Column<string>(type: "TEXT", nullable: false),
-                    ProvinceName = table.Column<string>(type: "TEXT", nullable: true)
+                    CommuneName = table.Column<string>(type: "text", nullable: false),
+                    DistrictName = table.Column<string>(type: "text", nullable: false),
+                    ProvinceName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -20,14 +21,26 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Norms",
+                columns: table => new
+                {
+                    ParamCode = table.Column<string>(type: "text", nullable: false),
+                    ParamNorm = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Norms", x => x.ParamCode);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    CommuneName = table.Column<string>(type: "TEXT", nullable: true),
-                    DistrictName = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    CommuneName = table.Column<string>(type: "text", nullable: true),
+                    DistrictName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,13 +57,13 @@ namespace API.Data.Migrations
                 name: "Stations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    StationName = table.Column<string>(type: "TEXT", nullable: true),
-                    GegrLat = table.Column<decimal>(type: "TEXT", nullable: false),
-                    GegrLon = table.Column<decimal>(type: "TEXT", nullable: false),
-                    CityId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AddressStreet = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    StationName = table.Column<string>(type: "text", nullable: true),
+                    GegrLat = table.Column<double>(type: "double precision", nullable: false),
+                    GegrLon = table.Column<double>(type: "double precision", nullable: false),
+                    CityId = table.Column<int>(type: "integer", nullable: false),
+                    AddressStreet = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,6 +89,9 @@ namespace API.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Norms");
+
             migrationBuilder.DropTable(
                 name: "Stations");
 

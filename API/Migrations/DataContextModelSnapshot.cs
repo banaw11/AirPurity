@@ -2,35 +2,37 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace API.Data.Migrations
+namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210327233716_FirstEntitiesCreate")]
-    partial class FirstEntitiesCreate
+    partial class DataContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .UseIdentityByDefaultColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("API.Entities.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<string>("CommuneName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("DistrictName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -42,39 +44,53 @@ namespace API.Data.Migrations
             modelBuilder.Entity("API.Entities.Commune", b =>
                 {
                     b.Property<string>("CommuneName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("DistrictName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProvinceName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("CommuneName", "DistrictName");
 
                     b.ToTable("Communes");
                 });
 
+            modelBuilder.Entity("API.Entities.Norm", b =>
+                {
+                    b.Property<string>("ParamCode")
+                        .HasColumnType("text");
+
+                    b.Property<double>("ParamNorm")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("ParamCode");
+
+                    b.ToTable("Norms");
+                });
+
             modelBuilder.Entity("API.Entities.Station", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<string>("AddressStreet")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("CityId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
-                    b.Property<decimal>("GegrLat")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("GegrLat")
+                        .HasColumnType("double precision");
 
-                    b.Property<decimal>("GegrLon")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("GegrLon")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("StationName")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

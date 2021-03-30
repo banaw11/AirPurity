@@ -8,6 +8,6 @@ namespace API.Entities
     public class Norm
     {
         public string ParamCode { get; set; }
-        public decimal ParamNorm { get; set; }
+        public double ParamNorm { get; set; }
     }
 }
