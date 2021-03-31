@@ -46,8 +46,8 @@ import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-m
       showSubtitle: false,
       titleFontSize: '10',
       titleFontWeight: '700',
-      titleColor:'',
-      unitsColor:'',
+      titleColor:'#dbdbdb',
+      unitsColor:'#dbdbdb',
       imageHeight:50,
       imageWidth:50
 

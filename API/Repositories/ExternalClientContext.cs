@@ -26,7 +26,8 @@ namespace API.Repositories
         public async Task<ICollection<MeasureDTO>> GetMeasures(int sensorId)
         {
             var measureData = await _client.GetFromJsonAsync<MeasureDataDTO>("data/getData/" + sensorId);
-            return measureData.Values.Where(x => x.Value != null).ToList();
+            DateTime currentDate = DateTime.UtcNow.Date.AddDays(-1);
+            return measureData.Values.Where(x => x.Value != null && x.DateFormat >= currentDate).ToList();
         }
 
         public async Task<ICollection<SensorDTO>> GetSensorsAsync(int stationId)
