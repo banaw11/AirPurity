@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace API.Migrations
 {
-    public partial class PostgresInitial : Migration
+    public partial class SqLiteInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,9 +10,9 @@ namespace API.Migrations
                 name: "Communes",
                 columns: table => new
                 {
-                    CommuneName = table.Column<string>(type: "text", nullable: false),
-                    DistrictName = table.Column<string>(type: "text", nullable: false),
-                    ProvinceName = table.Column<string>(type: "text", nullable: true)
+                    CommuneName = table.Column<string>(type: "TEXT", nullable: false),
+                    DistrictName = table.Column<string>(type: "TEXT", nullable: false),
+                    ProvinceName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -24,8 +23,8 @@ namespace API.Migrations
                 name: "Norms",
                 columns: table => new
                 {
-                    ParamCode = table.Column<string>(type: "text", nullable: false),
-                    ParamNorm = table.Column<double>(type: "double precision", nullable: false)
+                    ParamCode = table.Column<string>(type: "TEXT", nullable: false),
+                    ParamNorm = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,11 +35,11 @@ namespace API.Migrations
                 name: "Cities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    CommuneName = table.Column<string>(type: "text", nullable: true),
-                    DistrictName = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    CommuneName = table.Column<string>(type: "TEXT", nullable: true),
+                    DistrictName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,13 +56,13 @@ namespace API.Migrations
                 name: "Stations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StationName = table.Column<string>(type: "text", nullable: true),
-                    GegrLat = table.Column<double>(type: "double precision", nullable: false),
-                    GegrLon = table.Column<double>(type: "double precision", nullable: false),
-                    CityId = table.Column<int>(type: "integer", nullable: false),
-                    AddressStreet = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StationName = table.Column<string>(type: "TEXT", nullable: true),
+                    GegrLat = table.Column<double>(type: "REAL", nullable: false),
+                    GegrLon = table.Column<double>(type: "REAL", nullable: false),
+                    CityId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AddressStreet = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

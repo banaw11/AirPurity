@@ -2,6 +2,7 @@
 using API.Helpers;
 using API.Interfaces;
 using API.Repositories;
+using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
+            services.AddSingleton<OnlineTracker>();
             services.AddScoped<IExternalClientContext, ExternalClientContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
@@ -27,7 +29,8 @@ namespace API.Extensions
                 if (env == "Development")
                 {
                     // Use connection string from file.
-                    connStr = config.GetConnectionString("DefaultConnection");
+                    // connStr = config.GetConnectionString("DefaultConnection");
+                    connStr = config.GetConnectionString("SqLiteConnection");
                 }
                 else
                 {
@@ -50,7 +53,8 @@ namespace API.Extensions
 
                 // Whether the connection string came from the local development configuration file
                 // or from the environment variable from Heroku, use it to set up your DbContext.
-                options.UseNpgsql(connStr);
+               // options.UseNpgsql(connStr);
+                options.UseSqlite(connStr);
 
             });
             services.AddHttpClient("gios", x =>
