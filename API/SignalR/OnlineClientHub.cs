@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace API.SignalR
 {
-    [Authorize]
     public class OnlineClientHub : Hub
     {
         private readonly OnlineTracker _onlineTracker;
@@ -21,7 +20,12 @@ namespace API.SignalR
 
         public override async Task OnConnectedAsync()
         {
-            await _onlineTracker.ClientConnected(Context.ConnectionId, 1);
+            var httpContext = Context.GetHttpContext();
+            var query = httpContext.Request.Query.TryGetValue("stationId", out var stationId);
+            if(query)
+                await _onlineTracker.ClientConnected(Context.ConnectionId, int.Parse(stationId));
+
+            
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

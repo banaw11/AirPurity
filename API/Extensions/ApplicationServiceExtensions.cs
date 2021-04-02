@@ -6,6 +6,7 @@ using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using System;
 
 namespace API.Extensions
@@ -61,6 +62,7 @@ namespace API.Extensions
             {
                 x.BaseAddress = new Uri("http://api.gios.gov.pl/pjp-api/rest/");
             });
+            
 
             return services;
         }

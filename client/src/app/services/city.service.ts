@@ -7,6 +7,7 @@ import { City } from '../models/city';
 import { Sensor } from '../models/sensor';
 import { Station } from '../models/station';
 import { StationState } from '../models/stationState';
+import { OnlineClientService } from './online-client.service';
 import { StationService } from './station.service';
 
 @Injectable({
@@ -18,7 +19,7 @@ export class CityService {
   private citySource = new BehaviorSubject<City>(null);
   city$ = this.citySource.asObservable();
 
-  constructor(private http: HttpClient, private stationService: StationService) { }
+  constructor(private http: HttpClient, private stationService: StationService, private onlineClientService: OnlineClientService) { }
 
   getCity(cityName: string) {  
     this.http.get(this.apiUrl + 'city?cityName='+cityName).subscribe((response: City) => {
@@ -34,6 +35,7 @@ export class CityService {
     })
     this.citySource.next(temp);
     this.loadStationState(stationId);
+    this.onlineClientService.createHubConnection(stationId);
   }
 
   loadStationState(stationId: number){
