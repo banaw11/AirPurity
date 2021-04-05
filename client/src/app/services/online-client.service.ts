@@ -2,6 +2,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  HttpRequest, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { environment } from 'src/environments/environment';
+import { StationData } from '../models/stationData';
+import { StationState } from '../models/stationState';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +23,13 @@ export class OnlineClientService {
     .build()
 
     this.hubConnection.start()
+
+    this.hubConnection.on('RefreshedAirData', (data: StationData[]) => {
+      console.log(data);
+    })
+
+    this.hubConnection.on('RefreshedAirQuality', (state: StationState) => {
+      console.log(state);
+    })
   }
 }

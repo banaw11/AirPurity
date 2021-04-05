@@ -91,6 +91,9 @@ MIT
 @angular/router
 MIT
 
+@microsoft/signalr
+Apache-2.0
+
 @nebular/eva-icons
 MIT
 

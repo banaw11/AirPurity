@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.SignalR
@@ -28,6 +29,14 @@ namespace API.SignalR
             }
 
             return Task.CompletedTask;
+        }
+
+        public ICollection<ClientDto> GetOnlineClients()
+        {
+            lock (OnlineClients)
+            {
+                return OnlineClients.Select(x => new ClientDto { ConnectionId = x.Key, StationId = x.Value }).ToList();
+            }
         }
     }
 }
