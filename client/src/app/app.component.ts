@@ -9,6 +9,6 @@ import { CityService } from './services/city.service';
 export class AppComponent {
   title = 'AirPurity';
   constructor(private cityService: CityService){
-    this.cityService.getCity("Poznań");
+    //this.cityService.getCity("Poznań");
   }
 }

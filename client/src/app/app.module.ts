@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbCardModule ,NbActionsModule, NbSelectModule, NbAccordionModule, NbButtonModule, NbIconModule,
 NbInputModule } from '@nebular/theme';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
@@ -14,12 +15,14 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CityComponent } from './components/city/city.component';
 import {HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-measures-chart.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CityComponent,
-    PmMeasuresChartComponent
+    PmMeasuresChartComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,9 @@ import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-m
 
     }),
     ChartsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

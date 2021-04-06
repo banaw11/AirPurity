@@ -1,0 +1,57 @@
+<nb-layout withScroll="false">
+    <nb-layout-header subheader fxLayout="column" >
+            <nb-actions >
+                <nb-action>
+                    <button nbButton outline status="primary" shape="semi-round">AirPurity</button>
+                </nb-action>
+                <nb-action> 
+                    <label class="label"> JAKOŚĆ POWIETRZA W POLSCE</label>
+                </nb-action>
+            </nb-actions>
+    </nb-layout-header>
+    <nb-layout-column fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
+        <h6>WYSZUKAJ PO NAZWIE</h6>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="label">Miasto :</label>
+            <input nbInput outline status="control" shape="round" fieldSize="small">
+        </div>
+        <h6>LUB WYBIERZ</h6>
+        <div [formGroup]="cityForm" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around" fxLayoutGap="5px">
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <label class="label">Województwo :</label>
+                <nb-select formControlName="provinceControl" status="control" shape="semi-round" (selectedChange)="provinceSelected($event)">
+                    <nb-option *ngFor="let province of provinces" [value]="province.name">
+                        {{province.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <label class="label">Powiat :</label>
+                <nb-select formControlName="districtControl" status="control" shape="semi-round" (selectedChange)="districtSelected($event)">
+                    <nb-option *ngFor="let district of districts" [value]="district.name">
+                        {{district.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <label class="label">Gmina :</label>
+                <nb-select formControlName="communeControl" status="control" shape="semi-round" (selectedChange)="communeSelected($event)" >
+                    <nb-option *ngFor="let commune of communes" [value]="commune.name">
+                        {{commune.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+                <label class="label">Miasto :</label>
+                <nb-select formControlName="cityControl" status="control" shape="semi-round">
+                    <nb-option *ngFor="let city of cities" [value]="city.name">
+                        {{city.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+        </div>
+        <div>
+            <button nbButton outline [disabled]="!cityForm.controls.cityControl.value" status="success" shape="round" type="submit" >Zatwierdź</button>
+        </div>
+    </nb-layout-column>
+</nb-layout>
