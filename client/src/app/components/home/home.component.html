@@ -10,18 +10,11 @@
             </nb-actions>
     </nb-layout-header>
     <nb-layout-column fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
-        <h6>WYSZUKAJ PO NAZWIE</h6>
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-            <label class="label">Miasto :</label>
-            <input nbInput outline status="control" shape="round" fieldSize="small"
-             (keyup)="onKeyUp($event)"  [nbContextMenu]="items" nbContextMenuTrigger="focus" nbContextMenuTag="city-menu">
-        </div>
-        <h6>LUB WYBIERZ</h6>
+        <h6>WYBIERZ MIASTO</h6>
         <div [formGroup]="cityForm" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around" fxLayoutGap="5px">
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <label class="label">Województwo :</label>
-                <nb-select formControlName="provinceControl" status="control" shape="semi-round" 
-                    [selected]="cityForm.controls.provinceControl.value">
+                <nb-select formControlName="provinceControl" status="control" shape="semi-round">
                     <nb-option *ngFor="let province of provinces" [value]="province.name">
                         {{province.name}}
                     </nb-option>
@@ -29,8 +22,7 @@
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <label class="label">Powiat :</label>
-                <nb-select formControlName="districtControl" status="control" shape="semi-round" 
-                    [selected]="cityForm.controls.districtControl.value">
+                <nb-select formControlName="districtControl" status="control" shape="semi-round">
                     <nb-option *ngFor="let district of districts" [value]="district.name">
                         {{district.name}}
                     </nb-option>
@@ -46,8 +38,7 @@
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <label class="label">Miasto :</label>
-                <nb-select formControlName="cityControl" status="control" shape="semi-round" 
-                [selected]="cityForm.controls.cityControl.value">
+                <nb-select formControlName="cityControl" status="control" shape="semi-round">
                     <nb-option *ngFor="let city of cities" [value]="city.name">
                         {{city.name}}
                     </nb-option>
@@ -55,7 +46,7 @@
             </div>
         </div>
         <div>
-            <button nbButton outline [disabled]="!cityForm.controls.cityControl.value" status="success" shape="round" type="submit" >Zatwierdź</button>
+            <button nbButton outline [disabled]="!cityForm.controls.cityControl.value" status="success" shape="round" type="submit" (click)="citySelected()" >Zatwierdź</button>
         </div>
     </nb-layout-column>
 </nb-layout>

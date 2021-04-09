@@ -3,6 +3,7 @@
         <div>
             <nb-actions>
                 <nb-action *ngIf="flipped" icon="arrow-circle-left-outline" (click)="flipped = false"></nb-action>
+                <nb-action *ngIf="!flipped" icon="arrow-circle-left-outline" (click)="backToHome()"></nb-action>
                 <nb-action>
                     <label>{{(cityService.city$ |async)?.name}}</label></nb-action>
                 <nb-action *ngIf="station?.stationState" fxLayoutAlign="center center" fxLayoutGap="2px" fxLayout.xs="column">

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NbMenuItem, NbMenuService } from '@nebular/theme';
-import { filter, map } from 'rxjs/operators';
+import {  FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CityDTO } from 'src/app/models/formDTOs/cityDTO';
 import { CommuneDTO } from 'src/app/models/formDTOs/communeDTO';
 import { DistrictDTO } from 'src/app/models/formDTOs/districtDTO';
 import { ProvinceDTO } from 'src/app/models/formDTOs/provinceDTO';
+import { CityService } from 'src/app/services/city.service';
 
 @Component({
   selector: 'app-home',
@@ -15,45 +15,15 @@ import { ProvinceDTO } from 'src/app/models/formDTOs/provinceDTO';
 export class HomeComponent implements OnInit {
 
   cityForm: FormGroup;
-
-  provinces: ProvinceDTO[] = [
-    {name: "WIELKOPOLSKIE", 
-    districts: [
-      {name: "poznanski", communes: [
-        {name: "poznan", cities: [
-          {name:"Poznań", id: 1}
-        ]},
-        {name:"luboń", cities: [
-          {name:"Luboń", id:2}
-        ]}
-      ]}
-    ]},
-    {name: "ZACHODNIOPOMORSKIE", 
-    districts: [
-      {name: "GRYFIŃSKI", communes: [
-        {name: "CEDYNIA", cities: [
-          {name:"Cedynia", id: 11},
-          {name:"Osinów-Dolny", id: 12}
-        ]},
-        {name:"Chojna", cities: [
-          {name:"Chojna", id:21}
-        ]}
-      ]},
-      {name: "Szczeciński", communes: [
-        {name: "Szczecin", cities: [
-          {name:"Szczecin", id: 31}
-        ]}
-      ]}
-    ]},
-  ]
-
+  
+  provinces: ProvinceDTO[] = [];
   districts: DistrictDTO[] = [];
   communes: CommuneDTO[] =[];
   cities: CityDTO[] = [];
-  items: NbMenuItem[] = [{title:"brak wyników"}];
-  itemData: {city:CityDTO, commune: string, district: string, province: string} = null;
 
-  constructor(private fb: FormBuilder, private menuService: NbMenuService) { 
+
+  constructor(private fb: FormBuilder, private cityService: CityService, private router: Router) { 
+    this.cityService.getCities();
     this.cityForm = this.fb.group({
       provinceControl: [{value: null}],
       districtControl: [{value: null, disabled: true}],
@@ -63,20 +33,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuService.onItemClick()
-    .pipe(filter(({ tag }) => tag === 'city-menu'),
-    map(({ item: { data } }) => {
-      this.districts = [];
-      this.communes = [];
-      this.cities = [];
-      this.cityForm.controls.provinceControl.setValue(data.province);
-      this.cityForm.controls.districtControl.setValue(data.district);
-      this.cityForm.controls.communeControl.setValue(data.commune);
-      this.cityForm.controls.cityControl.setValue(data.city.name);
-
-      
-    }),).subscribe();
-
+    this.cityService.citiesForm$.subscribe(proviences => this.provinces=proviences);
     this.cityForm.get('provinceControl').valueChanges.subscribe(x => x != null ? this.provinceSelected(x): null);
     this.cityForm.get('districtControl').valueChanges.subscribe(x => x != null ? this.districtSelected(x): null);
     this.cityForm.get('communeControl').valueChanges.subscribe(x => x != null ? this.communeSelected(x): null);
@@ -125,27 +82,9 @@ export class HomeComponent implements OnInit {
   }
 
   citySelected(){
-
+    this.cityService.getCity(this.cityForm.controls.cityControl.value);
+    this.router.navigateByUrl("/city")
   }
-
-  onKeyUp(event: any){
-    if(event.target.value.length > 0){
-      this.items = [];
-    this.provinces.forEach(x => x.districts.forEach(y => y.communes.forEach(z => z.cities.forEach(c => {
-      if(c.name.toLowerCase().startsWith(event.target.value.toLowerCase())){
-        this.items.push({title:c.name, data:{city:c, commune:z.name, district:y.name, province:x.name}})
-      }
-     }))));
-     if(this.items.length < 1){
-      this.items = [{title:"brak wyników"}];
-     }
-    }
-    else{
-      this.items = [{title:"brak wyników"}];
-    }
-    
-  }
-
 
 
 }

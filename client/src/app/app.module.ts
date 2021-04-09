@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbThemeModule, NbLayoutModule, NbCardModule ,NbActionsModule, NbSelectModule, NbAccordionModule, NbButtonModule, NbIconModule,
-NbInputModule, NbMenuModule, NbContextMenuModule } from '@nebular/theme';
+NbInputModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartsModule } from 'ng2-charts';
@@ -41,8 +41,6 @@ import { HomeComponent } from './components/home/home.component';
     NbButtonModule,
     NbIconModule,
     NbInputModule,
-    NbMenuModule.forRoot(),
-    NbContextMenuModule,
     NgCircleProgressModule.forRoot({
       radius: 25,
       outerStrokeWidth: 6,

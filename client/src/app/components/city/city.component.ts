@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { City } from 'src/app/models/city';
@@ -23,7 +24,7 @@ export class CityComponent implements OnInit {
   private stationsSource = new BehaviorSubject<Station[]>(null);
   stations$ = this.stationsSource.asObservable();
 
-  constructor(public cityService: CityService, private sensorService: SensorService) {
+  constructor(public cityService: CityService, private sensorService: SensorService, private router: Router) {
     this.cityService.city$.pipe().subscribe((city: City) => {
       if(city){
         this.stationsSource.next(city.stations);
@@ -76,11 +77,15 @@ export class CityComponent implements OnInit {
   }
 
   getPM10Data():Measure[]{
-    return this.stationsData.find(x => x.paramCode == "PM10").values;
+    return this.stationsData.find(x => x.paramCode == "PM10") ? this.stationsData.find(x => x.paramCode == "PM10").values : [];
   }
 
   getPM25Data():Measure[]{
-    return this.stationsData.find(x => x.paramCode == "PM2.5").values;
+    return this.stationsData.find(x => x.paramCode == "PM2.5") ? this.stationsData.find(x => x.paramCode == "PM2.5").values : [];
+  }
+
+  backToHome(){
+    this.router.navigateByUrl('');
   }
 
 }
