@@ -13,6 +13,8 @@ Web application with measures of quality air.
 - Fluent API
 - LINQ
 - PostreSQL / SQLite
+- SignalR
+- Quartz .NET
 
 #### Client :
 - Angular 11+
@@ -22,6 +24,7 @@ Web application with measures of quality air.
 - TypeScript
 - HTML
 - CSS / SCSS
+- Flex-Layout
 
 ## Demo 
 The project is published on Heroku. You can try it out clicking by this [link](https://airpurity-banaw.herokuapp.com/)
