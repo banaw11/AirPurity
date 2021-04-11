@@ -82,8 +82,7 @@ export class HomeComponent implements OnInit {
   }
 
   citySelected(){
-    this.cityService.getCity(this.cityForm.controls.cityControl.value);
-    this.router.navigateByUrl("/city")
+    this.router.navigateByUrl("/city/"+this.cityForm.controls.cityControl.value)
   }
 
 

@@ -47,6 +47,12 @@ namespace API.Repositories
             return _mapper.Map<ICollection<StationClientDTO>>(city.Stations);
         }
 
+        public async Task<StationClientDTO> GetStationsByIdAsync(int stationId)
+        {
+            var station = await _context.Stations.Where(x => x.Id == stationId).FirstOrDefaultAsync();
+            return  _mapper.Map<StationClientDTO>(station);
+        }
+
         public async Task<StationStateDTO> GetStationState(int stationId)
         {
             return await _clientContext.GetStationState(stationId);

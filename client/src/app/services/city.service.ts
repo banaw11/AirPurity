@@ -4,10 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { City } from '../models/city';
 import { ProvinceDTO } from '../models/formDTOs/provinceDTO';
-import { Sensor } from '../models/sensor';
-import { StationState } from '../models/stationState';
-import { OnlineClientService } from './online-client.service';
-import { StationService } from './station.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +17,8 @@ export class CityService {
   private citySource = new BehaviorSubject<City>(null);
   city$ = this.citySource.asObservable();
 
-  constructor(private http: HttpClient, private stationService: StationService, private onlineClientService: OnlineClientService) { }
+
+  constructor(private http: HttpClient) { }
 
   getCities(){
     if(this.citiesFormSource.value.length < 1){
@@ -37,24 +34,6 @@ export class CityService {
     this.citySource.next(response);
   });
   
-  }
-
-  loadSensors(stationId : number){
-    let temp: City = this.citySource.value;
-    this.stationService.getSensors(stationId).subscribe((sensors: Sensor[]) => {
-      temp.stations.find(x => x.id == stationId).sensors= sensors;
-    })
-    this.citySource.next(temp);
-    this.loadStationState(stationId);
-    this.onlineClientService.createHubConnection(stationId);
-  }
-
-  loadStationState(stationId: number){
-    let temp: City = this.citySource.value;
-    this.stationService.getStationState(stationId).subscribe((stationState: StationState) => {
-      temp.stations.find(x => x.id == stationId).stationState = stationState;
-    })
-    this.citySource.next(temp);
   }
 }
 

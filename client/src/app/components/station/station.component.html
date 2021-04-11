@@ -1,0 +1,48 @@
+<nb-layout>
+    <nb-layout-header>
+        <div>
+            <nb-actions>
+                <nb-action icon="arrow-circle-left-outline" (click)="backToCity()"></nb-action>
+                <nb-action>
+                    <label>{{(stationService.station$ |async)?.stationName}}</label></nb-action>
+                <nb-action *ngIf="(stationService.station$ |async)?.stationState" fxLayoutAlign="center center" fxLayoutGap="2px" fxLayout.xs="column">
+                    <label class="label">Stan</label>
+                    <button nbButton outline shape="round" size="small"
+                    [status]='(stationService.station$ |async)?.stationState.stIndexLevel.id < 3 ? "success" 
+                        : (stationService.station$ |async)?.stationState.stIndexLevel.id < 5 ? "warning" : "danger"'>
+                            {{(stationService.station$ |async)?.stationState.stIndexLevel.indexLevelName}}
+                    </button>
+                </nb-action>
+            </nb-actions>
+        </div> 
+    </nb-layout-header>
+    <nb-layout-column>
+<nb-card fxLayout="column" fxLayout.gt-xs="row" fxLayoutAlign="space-between">
+    <div fxFlex.gt-xs="30">
+        <nb-accordion  *ngFor="let data of sensorService.stationData$ |async" >
+            <nb-accordion-item *ngIf="data.values.length > 0" >
+                <nb-accordion-item-header fxFlex="row" fxLayoutGap="10px">
+                <label>{{data.paramCode}}</label>  
+                <p>{{data.paramName}}</p>  
+                <circle-progress
+                [percent]='data.percents'
+                [outerStrokeColor]='data.percents < 34 ? "#77ff00" : data.percents > 80 ? "#ff0000" : "#ffee00"'
+                [animation]='true'>
+                </circle-progress>
+                <label class="label">{{data.values[0].value | number}} µg/m³</label>
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+                    <label class="label">Czas pomiaru {{(stationService.station$ |async)?.stationState?.calcDate | date:'d/M/yyyy HH:mm'}}</label>
+                    <p>Norma dla {{data.paramCode}} wynosi {{sensorService.getNorm(data.paramCode)}}µg/m³</p>
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+        </nb-accordion>
+    </div>
+    
+    <div *ngIf="sensorService.stationData$ |async" fxFlex="row" fxFlexOffset.gt-xs="20px"  >
+        
+        <app-pm-measures-chart [pm10Data]='sensorService.getPM10Data()' [pm25Data]='sensorService.getPM25Data()' ></app-pm-measures-chart>
+    </div>
+</nb-card>
+</nb-layout-column>
+</nb-layout>

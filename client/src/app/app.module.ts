@@ -16,13 +16,15 @@ import { CityComponent } from './components/city/city.component';
 import {HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-measures-chart.component';
 import { HomeComponent } from './components/home/home.component';
+import { StationComponent } from './components/station/station.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CityComponent,
     PmMeasuresChartComponent,
-    HomeComponent
+    HomeComponent,
+    StationComponent
   ],
   imports: [
     BrowserModule,

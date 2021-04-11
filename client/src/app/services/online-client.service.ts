@@ -4,6 +4,9 @@ import {  HttpRequest, HubConnection, HubConnectionBuilder } from '@microsoft/si
 import { environment } from 'src/environments/environment';
 import { StationData } from '../models/stationData';
 import { StationState } from '../models/stationState';
+import { CityService } from './city.service';
+import { SensorService } from './sensor.service';
+import { StationService } from './station.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +16,7 @@ export class OnlineClientService {
   hubUrl = environment.hubUrl;
   private hubConnection: HubConnection;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sensorService: SensorService, private stationService: StationService, private cityService: CityService) { }
 
 
   createHubConnection(stationId: number){
@@ -25,11 +28,15 @@ export class OnlineClientService {
     this.hubConnection.start()
 
     this.hubConnection.on('RefreshedAirData', (data: StationData[]) => {
-      console.log(data);
+      this.sensorService.updateStationData(data);
     })
 
     this.hubConnection.on('RefreshedAirQuality', (state: StationState) => {
-      console.log(state);
+      this.stationService.updateStationState(state);
     })
+  }
+
+  stopHubConnection() {
+    this.hubConnection.stop().catch(error => console.log(error));
   }
 }
