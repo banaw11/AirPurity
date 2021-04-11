@@ -1,10 +1,22 @@
 <nb-layout>
     <nb-layout-header>
-        <div>
-            <nb-actions>
+        <div fxFlex="100">
+            <nb-actions fxHide.gt-xs>
                 <nb-action icon="arrow-circle-left-outline" (click)="backToCity()"></nb-action>
-                <nb-action>
-                    <label>{{(stationService.station$ |async)?.stationName}}</label></nb-action>
+                
+                <nb-action *ngIf="(stationService.station$ |async)?.stationState" fxLayoutAlign="center center" fxLayoutGap="2px" fxLayout.xs="column">
+                    <label>{{(stationService.station$ |async)?.stationName}}</label>
+                    <label class="label">Stan</label>
+                    <button nbButton outline shape="round" size="tiny"
+                    [status]='(stationService.station$ |async)?.stationState.stIndexLevel.id < 3 ? "success" 
+                        : (stationService.station$ |async)?.stationState.stIndexLevel.id < 5 ? "warning" : "danger"'>
+                            {{(stationService.station$ |async)?.stationState.stIndexLevel.indexLevelName}}
+                    </button>
+                </nb-action>
+            </nb-actions>
+            <nb-actions fxHide.xs>
+                <nb-action icon="arrow-circle-left-outline" (click)="backToCity()"></nb-action>
+                <nb-action> <label>{{(stationService.station$ |async)?.stationName}}</label></nb-action>
                 <nb-action *ngIf="(stationService.station$ |async)?.stationState" fxLayoutAlign="center center" fxLayoutGap="2px" fxLayout.xs="column">
                     <label class="label">Stan</label>
                     <button nbButton outline shape="round" size="small"
