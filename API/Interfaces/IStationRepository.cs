@@ -12,6 +12,7 @@ namespace API.Interfaces
     {
         Task<City> GetCityByNameAsync(string cityName);
         Task<int> GetCityIdByNameAsync(string cityName);
+        Task<StationClientDTO> GetStationsByIdAsync(int stationId);
         Task<ICollection<StationClientDTO>> GetStationsByCityAsync(string cityName);
         Task<StationStateDTO> GetStationState(int stationId);
     }

@@ -1,10 +1,15 @@
 ﻿using API.Data;
 using API.Helpers;
 using API.Interfaces;
+using API.QuartzCore;
 using API.Repositories;
+using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using System;
 
 namespace API.Extensions
@@ -13,8 +18,10 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
+            services.AddSingleton<OnlineTracker>();
             services.AddScoped<IExternalClientContext, ExternalClientContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IHubRepository, HubRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddDbContext<DataContext>(options =>
             {
@@ -27,7 +34,8 @@ namespace API.Extensions
                 if (env == "Development")
                 {
                     // Use connection string from file.
-                    connStr = config.GetConnectionString("DefaultConnection");
+                     connStr = config.GetConnectionString("DefaultConnection");
+                   // connStr = config.GetConnectionString("SqLiteConnection");
                 }
                 else
                 {
@@ -51,12 +59,21 @@ namespace API.Extensions
                 // Whether the connection string came from the local development configuration file
                 // or from the environment variable from Heroku, use it to set up your DbContext.
                 options.UseNpgsql(connStr);
+               // options.UseSqlite(connStr);
 
             });
             services.AddHttpClient("gios", x =>
             {
                 x.BaseAddress = new Uri("http://api.gios.gov.pl/pjp-api/rest/");
             });
+
+            services.AddHostedService<QuartzHostedService>();
+            services.AddSingleton<IJobFactory, JobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<RemidersJob>();
+            services.AddSingleton(new Job(
+                type: typeof(RemidersJob),
+                expression: "0 5,15,30,45 * ? * *")); //every hour at minutes 5,15,30 and 45 
 
             return services;
         }

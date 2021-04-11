@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.DTOs.ClientDTOs;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,6 +26,13 @@ namespace API.Controllers
             var sensors = await _clientContext.GetSensorsAsync(stationId);
 
             return await Task.FromResult(sensors);
+        }
+        
+        [HttpGet]
+        public async Task<StationClientDTO> GetStation([FromQuery] int stationId){
+            var station = await _unitOfWork.StationRepository.GetStationsByIdAsync(stationId);
+
+            return await Task.FromResult(station);
         }
     }
 }

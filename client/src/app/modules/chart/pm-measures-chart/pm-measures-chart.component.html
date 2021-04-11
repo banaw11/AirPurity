@@ -1,4 +1,4 @@
-<div class="chartContainer" style="display: block;">
+<div class="chartContainer" style="display: block;" *ngIf="pm10Data.length>0 || pm25Data.length>0">
   <label class="label">Dane pomiarowe pyłów PM</label>
   <canvas baseChart
     [datasets]="lineChartData"

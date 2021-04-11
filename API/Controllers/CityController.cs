@@ -1,8 +1,6 @@
-﻿using API.DTOs;
-using API.DTOs.ClientDTOs;
+﻿using API.DTOs.ClientDTOs;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +14,15 @@ namespace API.Controllers
         public CityController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        [HttpGet("All")]
+        public async Task<ActionResult<ICollection<ProvinceFormDTO>>> GetCitiesAsync()
+        {
+            var proviences = await _unitOfWork.CityRepository.GetCitiesAsync();
+            if(proviences.Any())
+                return Ok(proviences);
+            return BadRequest("Failed during load data");
         }
 
         [HttpGet]

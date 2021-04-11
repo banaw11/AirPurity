@@ -1,9 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Measure } from 'src/app/models/measure';
 
 @Component({
@@ -33,22 +31,42 @@ export class PmMeasuresChartComponent implements OnChanges{
   constructor(private datePipe: DatePipe) { }
 
   ngOnChanges(): void {
-    this.lineChartData = [
-      { data: this.pm10Data.map(x => x.value).reverse(),
-         label: 'PM 10' },
-      { data: this.pm25Data.map(x => x.value).reverse(), label: 'PM 2.5' },
-    ];
-
+    this.lineChartData = [];
+    this.lineChartLabels = [];
+    this.pm10Data.length> 0 ? this.lineChartData.push(this.loadPM10()) : null;
+    this.pm25Data.length> 0 ? this.lineChartData.push(this.loadPM25()) : null;
+  
     this.lineChartLabels = this.convertDates();
   }
 
 
   convertDates(): string[]{
     let dates: string[] = [];
-    this.pm10Data.map(x => x.dateFormat).forEach( x=> {
-      dates.push(this.datePipe.transform(x, 'MM-dd HH:mm'));
-    })
+    if(this.pm10Data.length >0){
+      this.pm10Data.map(x => x.dateFormat).forEach( x=> {
+        dates.push(this.datePipe.transform(x, 'MM-dd HH:mm'));
+      })
+    }
+    else if(this.pm25Data.length >0){
+      this.pm25Data.map(x => x.dateFormat).forEach( x=> {
+        dates.push(this.datePipe.transform(x, 'MM-dd HH:mm'));
+      })
+    }
     return dates.reverse();
+  }
+
+  loadPM10(): ChartDataSets{
+    let dataSet: ChartDataSets = {};
+    dataSet.data = this.pm10Data.map(x => x.value).reverse()
+    dataSet.label = "PM 10"
+    return dataSet
+  }
+
+  loadPM25(): ChartDataSets{
+    let dataSet: ChartDataSets = {};
+    dataSet.data = this.pm25Data.map(x => x.value).reverse()
+    dataSet.label = "PM 25"
+    return dataSet
   }
 
 }

@@ -2,63 +2,25 @@
     <nb-layout-header>
         <div>
             <nb-actions>
-                <nb-action *ngIf="flipped" icon="arrow-circle-left-outline" (click)="flipped = false"></nb-action>
+                <nb-action icon="arrow-circle-left-outline" (click)="backToHome()"></nb-action>
                 <nb-action>
-                    <label>{{(cityService.city$ |async)?.name}}</label></nb-action>
-                <nb-action *ngIf="station?.stationState" fxLayoutAlign="center center" fxLayoutGap="2px" fxLayout.xs="column">
-                    <label class="label">Stan</label>
-                    <button nbButton outline shape="round" size="small"
-                    [status]='getIndexLevel() < 3 ? "success": getIndexLevel() < 5 ? "warning" : "danger"'>{{getStationState()}}</button>
+                    <label>{{(cityService.city$ |async)?.name}}</label>
                 </nb-action>
             </nb-actions>
         </div> 
     </nb-layout-header>
-    <nb-layout-column>
-        <nb-flip-card [showToggleButton]='false' [flipped]="flipped">
-            <nb-card-front>
-                
-                <nb-card fxFlex.gt-xs="30">
-                    <nb-accordion >
-                        <nb-accordion-item *ngFor="let station of (stations$ |async)">
-                            <nb-accordion-item-header>
-                                <button nbButton outline (click)="loadSensors(station.id)">
-                                    {{station.stationName}}
-                                </button>
-                            </nb-accordion-item-header>
-                            <nb-accordion-item-body>{{station.addressStreet}}</nb-accordion-item-body>
-                        </nb-accordion-item>
-                    </nb-accordion>
-                </nb-card>
-            </nb-card-front>
-            <nb-card-back>
-                <nb-card fxLayout="column" fxLayout.gt-xs="row" fxLayoutAlign="space-between">
-                    <div fxFlex.gt-xs="30">
-                        <nb-accordion  *ngFor="let data of stationsData" >
-                            <nb-accordion-item *ngIf="data.values.length > 0" >
-                                <nb-accordion-item-header fxFlex="row" fxLayoutGap="10px">
-                                <label>{{data.paramCode}}</label>  
-                                <p>{{data.paramName}}</p>  
-                                <circle-progress
-                                [percent]='data.percents'
-                                [outerStrokeColor]='data.percents < 34 ? "#77ff00" : data.percents > 80 ? "#ff0000" : "#ffee00"'
-                                [animation]='true'>
-                                </circle-progress>
-                                <label class="label">{{data.values[0].value | number}} µg/m³</label>
-                                </nb-accordion-item-header>
-                                <nb-accordion-item-body>
-                                    <label class="label">Czas pomiaru {{data.values[0].dateFormat | date:'d/M/yyyy HH:mm'}}</label>
-                                    <p>Norma dla {{data.paramCode}} wynosi {{getNorm(data.paramCode)}}µg/m³</p>
-                                </nb-accordion-item-body>
-                            </nb-accordion-item>
-                        </nb-accordion>
-                    </div>
-                    
-                    <div *ngIf="stationsData" fxFlex="column" fxFlex.gt-xs="50" fxFlexOffset.gt-xs="10">
-                        
-                        <app-pm-measures-chart [pm10Data]='getPM10Data()' [pm25Data]='getPM25Data()' style="width: auto; height: auto;"></app-pm-measures-chart>
-                    </div>
-                </nb-card>
-            </nb-card-back>
-        </nb-flip-card>
+    <nb-layout-column fxLayoutAlign="center start">
+        <nb-card fxFlex.gt-xs="30" >
+            <nb-accordion >
+                <nb-accordion-item *ngFor="let station of (cityService.city$ |async)?.stations">
+                    <nb-accordion-item-header>
+                        <button nbButton outline (click)="loadStation(station.id)">
+                            {{station.stationName}}
+                        </button>
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>{{station.addressStreet}}</nb-accordion-item-body>
+                </nb-accordion-item>
+            </nb-accordion>
+        </nb-card>
     </nb-layout-column>
 </nb-layout>
