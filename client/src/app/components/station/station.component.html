@@ -45,7 +45,7 @@
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
                     <label class="label">Czas pomiaru {{(stationService.station$ |async)?.stationState?.calcDate | date:'d/M/yyyy HH:mm'}}</label>
-                    <p>Norma dla {{data.paramCode}} wynosi {{sensorService.getNorm(data.paramCode)}}µg/m³</p>
+                    <p>Norma dla <b>{{data.paramCode}}</b> wynosi <b>{{sensorService.getNorm(data.paramCode)}} µg/m³</b></p>
                 </nb-accordion-item-body>
             </nb-accordion-item>
         </nb-accordion>

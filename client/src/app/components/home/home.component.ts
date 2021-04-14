@@ -34,14 +34,14 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cityService.citiesForm$.subscribe(proviences => this.provinces=proviences);
+    this.cityService.citiesForm$.subscribe(proviences => this.provinces=proviences.sort((a,b) => a.name.localeCompare(b.name)));
     this.cityForm.get('provinceControl').valueChanges.subscribe(x => x != null ? this.provinceSelected(x): null);
     this.cityForm.get('districtControl').valueChanges.subscribe(x => x != null ? this.districtSelected(x): null);
     this.cityForm.get('communeControl').valueChanges.subscribe(x => x != null ? this.communeSelected(x): null);
   }
 
   provinceSelected(event: any){
-    this.districts = this.provinces.find(x => x.name === event).districts;
+    this.districts = this.provinces.find(x => x.name === event).districts.sort((a,b) => a.name.localeCompare(b.name));
     this.cityForm.controls.districtControl.setValue(null);
     this.cityForm.controls.communeControl.setValue(null);
     this.cityForm.controls.cityControl.setValue(null);
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
   }
   districtSelected(event: any){
     this.communes = this.provinces.find(x => x.name === this.cityForm.controls.provinceControl.value)
-      .districts.find(x => x.name === event).communes;
+      .districts.find(x => x.name === event).communes.sort((a,b) => a.name.localeCompare(b.name));
     this.cityForm.controls.communeControl.setValue(null);
     this.cityForm.controls.cityControl.setValue(null);
     if(event != null){
@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
   communeSelected(event: any){
     this.cities = this.provinces.find(x => x.name === this.cityForm.controls.provinceControl.value).districts.find(
       x => x.name === this.cityForm.controls.districtControl.value)
-        .communes.find(x => x.name === event).cities;
+        .communes.find(x => x.name === event).cities.sort((a,b) => a.name.localeCompare(b.name));
     this.cityForm.controls.cityControl.setValue(null);
     if(event != null){
       this.cityForm.controls.cityControl.enable();
