@@ -1,4 +1,4 @@
-<nb-layout>
+<nb-layout *ngIf="(busyService.isBusy$ |async) == false">
     <nb-layout-header>
         <div fxFlex="100">
             <nb-actions fxHide.gt-xs>
@@ -45,15 +45,14 @@
                 </nb-accordion-item-header>
                 <nb-accordion-item-body>
                     <label class="label">Czas pomiaru {{(stationService.station$ |async)?.stationState?.calcDate | date:'d/M/yyyy HH:mm'}}</label>
-                    <p>Norma dla {{data.paramCode}} wynosi {{sensorService.getNorm(data.paramCode)}}µg/m³</p>
+                    <p>Norma dla <b>{{data.paramCode}}</b> wynosi <b>{{sensorService.getNorm(data.paramCode)}} µg/m³</b></p>
                 </nb-accordion-item-body>
             </nb-accordion-item>
         </nb-accordion>
     </div>
     
     <div *ngIf="sensorService.stationData$ |async" fxFlex="row" fxFlexOffset.gt-xs="20px"  >
-        
-        <app-pm-measures-chart [pm10Data]='sensorService.getPM10Data()' [pm25Data]='sensorService.getPM25Data()' ></app-pm-measures-chart>
+        <app-pm-measures-chart [pmMeasures]="sensorService.pmMeasures$ | async" ></app-pm-measures-chart>
     </div>
 </nb-card>
 </nb-layout-column>

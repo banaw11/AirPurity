@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges,  SimpleChanges } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { Measure } from 'src/app/models/measure';
+
 
 @Component({
   selector: 'app-pm-measures-chart',
@@ -10,12 +11,14 @@ import { Measure } from 'src/app/models/measure';
   styleUrls: ['./pm-measures-chart.component.scss']
 })
 export class PmMeasuresChartComponent implements OnChanges{
-  @Input() pm10Data: Measure[];
-  @Input() pm25Data: Measure[];
+  @Input() pmMeasures: {pm10: Measure[], pm25: Measure[]};
+
+  pm10Data: Measure[] = [];
+  pm25Data: Measure[] = [];
   
   public lineChartData: ChartDataSets[] = [];
   public lineChartLabels: Label[] = [];
-  public lineChartOptions: ChartOptions = {
+  public lineChartOptions: (ChartOptions & {annotation?: any}) = {
     responsive: true,
   };
   public lineChartColors: Color[] = [
@@ -28,17 +31,25 @@ export class PmMeasuresChartComponent implements OnChanges{
   public lineChartType: ChartType = 'line';
   public lineChartPlugins = [];
 
-  constructor(private datePipe: DatePipe) { }
-
-  ngOnChanges(): void {
-    this.lineChartData = [];
-    this.lineChartLabels = [];
-    this.pm10Data.length> 0 ? this.lineChartData.push(this.loadPM10()) : null;
-    this.pm25Data.length> 0 ? this.lineChartData.push(this.loadPM25()) : null;
-  
-    this.lineChartLabels = this.convertDates();
+  constructor(private datePipe: DatePipe) {
+    
+   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes){
+      this.convertMeasures();
+      this.pm10Data.length> 0 ? this.lineChartData.push(this.loadPM10()) : null;
+      this.pm25Data.length> 0 ? this.lineChartData.push(this.loadPM25()) : null;
+      this.lineChartLabels = this.convertDates();
+    }
   }
 
+
+  convertMeasures(){
+    this.lineChartLabels = [];
+    this.lineChartData = [];
+    this.pm10Data = this.pmMeasures.pm10
+    this.pm25Data = this.pmMeasures.pm25;
+  }
 
   convertDates(): string[]{
     let dates: string[] = [];

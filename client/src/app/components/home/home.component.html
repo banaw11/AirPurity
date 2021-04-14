@@ -9,7 +9,7 @@
                 </nb-action>
             </nb-actions>
     </nb-layout-header>
-    <nb-layout-column fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px">
+    <nb-layout-column fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="(busyService.isBusy$ |async) == false">
         <h6>WYBIERZ MIASTO</h6>
         <div [formGroup]="cityForm" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around" fxLayoutGap="5px">
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">

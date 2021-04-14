@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { BusyService } from 'src/app/services/busy.service';
 import { OnlineClientService } from 'src/app/services/online-client.service';
 import { SensorService } from 'src/app/services/sensor.service';
 import { StationService } from 'src/app/services/station.service';
@@ -16,7 +17,7 @@ export class StationComponent implements OnInit, OnDestroy {
   cityName: string;
 
   constructor(public stationService: StationService, public sensorService: SensorService, private onlineService: OnlineClientService, private router: Router,
-     private route: ActivatedRoute) {
+     private route: ActivatedRoute, public busyService: BusyService) {
       this.sub = this.route.queryParams.subscribe(params => {
          this.stationId = + params['id'];
          this.cityName =  params['city'];

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Measure } from '../models/measure';
 import { Norm } from '../models/norm';
@@ -19,8 +19,24 @@ export class SensorService {
 
   private normsSource = new BehaviorSubject<Norm[]>([]);
   norms$ = this.normsSource.asObservable();
+ 
+  private pmMeasuresSource = new BehaviorSubject<{pm10: Measure[], pm25: Measure[]}>({pm10:[],pm25:[]});
+  pmMeasures$ = this.pmMeasuresSource.asObservable();
 
-  constructor(private http: HttpClient, private stationService: StationService) { }
+
+
+  constructor(private http: HttpClient) {
+    this.stationData$.subscribe( stationData => {
+      if(stationData){
+        this.pmMeasuresSource.next(
+          {
+            pm10: this.getPM10Data(),
+            pm25: this.getPM25Data()
+          }
+          )
+      }
+    })
+   }
 
   getSensorsData(stationId){
     this.getNorms();

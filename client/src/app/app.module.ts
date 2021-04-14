@@ -10,13 +10,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { NgxSpinnerModule } from "ngx-spinner";
 import { DatePipe } from '@angular/common';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { CityComponent } from './components/city/city.component';
-import {HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import {HttpClientModule, HttpClientJsonpModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-measures-chart.component';
 import { HomeComponent } from './components/home/home.component';
 import { StationComponent } from './components/station/station.component';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -57,12 +59,16 @@ import { StationComponent } from './components/station/station.component';
       imageWidth:50
 
     }),
+    NgxSpinnerModule,
     ChartsModule,
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi:true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -10,7 +10,7 @@
         </div> 
     </nb-layout-header>
     <nb-layout-column fxLayoutAlign="center start">
-        <nb-card fxFlex.gt-xs="30" >
+        <nb-card fxFlex.gt-xs="30" *ngIf="(busyService.isBusy$ |async) == false">
             <nb-accordion >
                 <nb-accordion-item *ngFor="let station of (cityService.city$ |async)?.stations">
                     <nb-accordion-item-header>
