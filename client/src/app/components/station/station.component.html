@@ -52,8 +52,7 @@
     </div>
     
     <div *ngIf="sensorService.stationData$ |async" fxFlex="row" fxFlexOffset.gt-xs="20px"  >
-        
-        <app-pm-measures-chart [pm10Data]='sensorService.getPM10Data()' [pm25Data]='sensorService.getPM25Data()' ></app-pm-measures-chart>
+        <app-pm-measures-chart [pmMeasures]="sensorService.pmMeasures$ | async" ></app-pm-measures-chart>
     </div>
 </nb-card>
 </nb-layout-column>
