@@ -5,6 +5,7 @@ import { CityDTO } from 'src/app/models/formDTOs/cityDTO';
 import { CommuneDTO } from 'src/app/models/formDTOs/communeDTO';
 import { DistrictDTO } from 'src/app/models/formDTOs/districtDTO';
 import { ProvinceDTO } from 'src/app/models/formDTOs/provinceDTO';
+import { BusyService } from 'src/app/services/busy.service';
 import { CityService } from 'src/app/services/city.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
   cities: CityDTO[] = [];
 
 
-  constructor(private fb: FormBuilder, private cityService: CityService, private router: Router) { 
+  constructor(private fb: FormBuilder, private cityService: CityService, private router: Router, public busyService: BusyService) { 
     this.cityService.getCities();
     this.cityForm = this.fb.group({
       provinceControl: [{value: null}],

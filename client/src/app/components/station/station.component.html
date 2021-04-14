@@ -1,4 +1,4 @@
-<nb-layout>
+<nb-layout *ngIf="(busyService.isBusy$ |async) == false">
     <nb-layout-header>
         <div fxFlex="100">
             <nb-actions fxHide.gt-xs>

@@ -225,6 +225,9 @@ MIT
 ng2-charts
 ISC
 
+ngx-spinner
+MIT
+
 rxjs
 Apache-2.0
                                Apache License
