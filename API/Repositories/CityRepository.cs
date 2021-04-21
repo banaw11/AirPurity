@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.DTOs.ClientDTOs;
+using API.DTOs.Pagination;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -20,41 +21,28 @@ namespace API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<ICollection<ProvinceFormDTO>> GetCitiesAsync()
+        public async Task<IEnumerable<ProvinceFormDTO>> GetCitiesAsync(CityQuery query)
         {
-            var provinces = new List<ProvinceFormDTO>();
-            // var results = _context.Communes.Select(x => x).AsEnumerable().GroupBy(x => x.ProvinceName);
+            var provinces = await _context.Provinces
+                .Where(p =>  p.ProvinceName == query.ProvinceName || 
+                    query.ProvinceName == null)
+                .Include(p => p.Districts
+                    .Where(d => d.DistrictName == query.DistrictName ||
+                        (query.DistrictName == null &&
+                        query.ProvinceName != null)))
+                .ThenInclude(d => d.Communes
+                    .Where(c => c.CommuneName == query.CommuneName ||
+                        (query.CommuneName == null  && 
+                        query.ProvinceName != null && 
+                        query.DistrictName != null)))
+                .ThenInclude(c => c.Cities
+                    .Where(c => query.ProvinceName != null && 
+                        query.DistrictName != null && 
+                        query.CommuneName != null))
+                .ToListAsync();
 
-            // foreach(var result in results)
-            // {
-            //     var province = new ProvinceFormDTO();
-            //     province.Name = result.Key;
-            //     province.Districts = new List<DistrictFormDTO>();
-            //     var districtsResults = result.Select(x => x).AsEnumerable().GroupBy(x => x.DistrictName);
-            //     foreach (var districtResult in districtsResults)
-            //     {
-            //         var district = new DistrictFormDTO();
-            //         district.Name = districtResult.Key;
-            //         district.Communes = new List<CommuneFormDTO>();
-            //         var communesResults = districtResult.Select(x => x).AsEnumerable().GroupBy(x => x.CommuneName);
-            //         foreach (var communeResult in communesResults)
-            //         {
-            //             var commune = new CommuneFormDTO();
-            //             commune.Name = communeResult.Key;
-            //             commune.Cities = await _context.Cities
-            //                 .Where(x => x.CommuneName == commune.Name && x.DistrictName == district.Name)
-            //                 .Select(x => new CityFormDTO{Name = x.Name, Id = x.Id})
-            //                 .ToListAsync();
-
-            //             district.Communes.Add(commune);
-                        
-            //         }
-            //         province.Districts.Add(district);
-            //     }
-            //     provinces.Add(province);
-            // }
-
-            return provinces;
+            var provincesDTO = _mapper.Map<IEnumerable<ProvinceFormDTO>>(provinces);
+            return provincesDTO;
         }
 
         public async Task<CityClientDTO> GetCityByNameAsync(string cityName)

@@ -18,21 +18,18 @@ namespace API.Data
             if(await context.Stations.AnyAsync() == false)
             {
                 var stationsDTO = await clientContext.GetStationsAsync();
-                var communesDTO = stationsDTO.Select(x => x.City.Commune)
-                    .GroupBy(x => new { x.CommuneName, x.DistrictName })
+                var communes = stationsDTO.Select(x => x.City.Commune)
+                    .GroupBy(x => new { x.CommuneName, x.DistrictName, x.ProvinceName })
                     .Select(x => x.First()).ToList();
-                var provinces = communesDTO.Select(x => x)
+                var provinces = communes.Select(x => x)
                     .GroupBy(x => x.ProvinceName)
                     .Select(x => x.First()).OrderBy(x => x.ProvinceName).Select(x => x.ProvinceName.ToUpper()).ToList();
-                var districts = communesDTO.Select(x => x)
+                var districts = communes.Select(x => x)
                     .GroupBy(x => new {x.DistrictName, x.ProvinceName})
                     .Select(x => x.First()).OrderBy(x => x.DistrictName).Select(x => new {x.DistrictName, x.ProvinceName}).ToList();
-                var communes = communesDTO.Select(x => x)
-                    .GroupBy(x => new {x.CommuneName, x.DistrictName, x.ProvinceName})
-                    .Select(x => x.First()).OrderBy(x => x.CommuneName).Select(x => new{x.CommuneName, x.DistrictName, x.ProvinceName}).ToList();
                 var cities = stationsDTO.Select(x => x.City)
                     .GroupBy(x => new {x.Id, x.Commune.CommuneName})
-                    .Select(x => x.First()).OrderBy(x => x.Commune.CommuneName).Select(x => x).ToList();
+                    .Select(x => x.First()).OrderBy(x => x.Name).Select(x => x).ToList();
 
                 var provincesList = new List<Province>();
                 foreach(var provinceDTO in provinces)
@@ -43,9 +40,7 @@ namespace API.Data
                         ProvinceName = provinceDTO,
                         Districts = new List<District>()
                     };
-                    foreach(var districtDTO in districts
-                                                .Where(x => x.ProvinceName.ToUpper() == province.ProvinceName)
-                                                .ToList())
+                    foreach(var districtDTO in districts.Where(x => x.ProvinceName.ToUpper() == province.ProvinceName))
                     {
                         var district = new District()
                         {
@@ -54,10 +49,8 @@ namespace API.Data
                             ProvienceId = province.Id,
                             Communes = new List<Commune>()
                         };
-                        foreach (var communeDTO in communes
-                                                    .Where(x => x.DistrictName.ToUpper() == district.DistrictName &&
-                                                         x.ProvinceName.ToUpper() == province.ProvinceName)
-                                                    .ToList())
+                        foreach (var communeDTO in communes.Where(x => x.DistrictName.ToUpper() == district.DistrictName &&
+                                                                        x.ProvinceName.ToUpper() == province.ProvinceName))
                         {
                             var commune = new Commune()
                             {
@@ -67,9 +60,7 @@ namespace API.Data
                                 Cities = new List<City>()
                             };
                             
-                            foreach (var cityDTO in cities
-                                                        .Where(x => x.Commune.CommuneName.ToUpper() == commune.CommuneName )
-                                                        .ToList())
+                            foreach (var cityDTO in cities.Where(x => x.Commune.CommuneName.ToUpper() == commune.CommuneName ))
                             {
                                 var city = mapper.Map<City>(cityDTO);
                                 city.Stations = stationsDTO.Where(x => x.City.Id == city.Id)
@@ -80,13 +71,11 @@ namespace API.Data
                             }
                             district.Communes.Add(commune);
                         }   
-
                         province.Districts.Add(district);
                     }
                     provincesList.Add(province);
                 }
 
-               
                context.AddRange(provincesList);
             }
 

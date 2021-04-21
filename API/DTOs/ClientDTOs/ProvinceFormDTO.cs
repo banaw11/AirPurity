@@ -4,7 +4,7 @@ namespace API.DTOs.ClientDTOs
 {
     public class ProvinceFormDTO
     {
-        public string Name { get; set; }
+        public string ProvinceName { get; set; }
         public ICollection<DistrictFormDTO> Districts { get; set; }
     }
 }

@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using API.SignalR;
+using FluentValidation.AspNetCore;
 
 namespace API
 {
@@ -32,7 +33,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_config);
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddCors();
             services.AddSignalR();
             services.AddSwaggerGen(c =>

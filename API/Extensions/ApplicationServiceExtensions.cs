@@ -1,9 +1,12 @@
 ﻿using API.Data;
+using API.DTOs.Pagination;
+using API.DTOs.Validators;
 using API.Helpers;
 using API.Interfaces;
 using API.QuartzCore;
 using API.Repositories;
 using API.SignalR;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,6 +65,7 @@ namespace API.Extensions
                 options.UseSqlite(connStr).EnableSensitiveDataLogging();
 
             });
+            services.AddScoped<IValidator<CityQuery>, CityQueryValidator>();
             services.AddHttpClient("gios", x =>
             {
                 x.BaseAddress = new Uri("http://api.gios.gov.pl/pjp-api/rest/");
@@ -74,6 +78,7 @@ namespace API.Extensions
             services.AddSingleton(new Job(
                 type: typeof(RemidersJob),
                 expression: "0 5,15,30,45 * ? * *")); //every hour at minutes 5,15,30 and 45 
+            
 
             return services;
         }

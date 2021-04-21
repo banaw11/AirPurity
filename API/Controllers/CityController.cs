@@ -1,4 +1,5 @@
 ﻿using API.DTOs.ClientDTOs;
+using API.DTOs.Pagination;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace API.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<ICollection<ProvinceFormDTO>>> GetCitiesAsync()
+        public async Task<ActionResult<IEnumerable<ProvinceFormDTO>>> GetCitiesAsync([FromQuery] CityQuery query)
         {
-            var proviences = await _unitOfWork.CityRepository.GetCitiesAsync();
+            var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
             if(proviences.Any())
                 return Ok(proviences);
             return BadRequest("Failed during load data");

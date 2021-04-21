@@ -4,7 +4,7 @@ namespace API.DTOs.ClientDTOs
 {
     public class DistrictFormDTO
     {
-        public string Name { get; set; }
+        public string DistrictName { get; set; }
         public ICollection<CommuneFormDTO> Communes { get; set; }
     }
 }
