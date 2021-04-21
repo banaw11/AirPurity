@@ -23,36 +23,36 @@ namespace API.Repositories
         public async Task<ICollection<ProvinceFormDTO>> GetCitiesAsync()
         {
             var provinces = new List<ProvinceFormDTO>();
-            var results = _context.Communes.Select(x => x).AsEnumerable().GroupBy(x => x.ProvinceName);
+            // var results = _context.Communes.Select(x => x).AsEnumerable().GroupBy(x => x.ProvinceName);
 
-            foreach(var result in results)
-            {
-                var province = new ProvinceFormDTO();
-                province.Name = result.Key;
-                province.Districts = new List<DistrictFormDTO>();
-                var districtsResults = result.Select(x => x).AsEnumerable().GroupBy(x => x.DistrictName);
-                foreach (var districtResult in districtsResults)
-                {
-                    var district = new DistrictFormDTO();
-                    district.Name = districtResult.Key;
-                    district.Communes = new List<CommuneFormDTO>();
-                    var communesResults = districtResult.Select(x => x).AsEnumerable().GroupBy(x => x.CommuneName);
-                    foreach (var communeResult in communesResults)
-                    {
-                        var commune = new CommuneFormDTO();
-                        commune.Name = communeResult.Key;
-                        commune.Cities = await _context.Cities
-                            .Where(x => x.CommuneName == commune.Name && x.DistrictName == district.Name)
-                            .Select(x => new CityFormDTO{Name = x.Name, Id = x.Id})
-                            .ToListAsync();
+            // foreach(var result in results)
+            // {
+            //     var province = new ProvinceFormDTO();
+            //     province.Name = result.Key;
+            //     province.Districts = new List<DistrictFormDTO>();
+            //     var districtsResults = result.Select(x => x).AsEnumerable().GroupBy(x => x.DistrictName);
+            //     foreach (var districtResult in districtsResults)
+            //     {
+            //         var district = new DistrictFormDTO();
+            //         district.Name = districtResult.Key;
+            //         district.Communes = new List<CommuneFormDTO>();
+            //         var communesResults = districtResult.Select(x => x).AsEnumerable().GroupBy(x => x.CommuneName);
+            //         foreach (var communeResult in communesResults)
+            //         {
+            //             var commune = new CommuneFormDTO();
+            //             commune.Name = communeResult.Key;
+            //             commune.Cities = await _context.Cities
+            //                 .Where(x => x.CommuneName == commune.Name && x.DistrictName == district.Name)
+            //                 .Select(x => new CityFormDTO{Name = x.Name, Id = x.Id})
+            //                 .ToListAsync();
 
-                        district.Communes.Add(commune);
+            //             district.Communes.Add(commune);
                         
-                    }
-                    province.Districts.Add(district);
-                }
-                provinces.Add(province);
-            }
+            //         }
+            //         province.Districts.Add(district);
+            //     }
+            //     provinces.Add(province);
+            // }
 
             return provinces;
         }

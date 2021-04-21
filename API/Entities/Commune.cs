@@ -7,9 +7,10 @@ namespace API.Entities
 {
     public class Commune
     {
+        public int Id { get; set; }
         public string CommuneName { get; set; }
-        public string DistrictName { get; set; }
-        public string ProvinceName { get; set; }
+        public int DistrictId { get; set; }
+        public virtual District District { get; set; }
         public virtual ICollection<City> Cities { get; set; }
     }
 }

@@ -20,8 +20,11 @@ namespace API.Helpers
             CreateMap<City, CityDTO>()
                 .ReverseMap()
                 .ForMember(x => x.Commune, opt => opt.Ignore());
+
             CreateMap<Commune, CommuneDTO>()
-                .ReverseMap();
+                .ForMember(c => c.CommuneName, opt => opt.MapFrom(c => c.CommuneName.ToUpper()))
+                .ReverseMap()
+                .ForMember(c => c.CommuneName, opt => opt.MapFrom(c => c.CommuneName.ToUpper()));
 
             CreateMap<SensorDTO, SensorDataDTO>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.Id))
