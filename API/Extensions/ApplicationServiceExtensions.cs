@@ -3,6 +3,7 @@ using API.DTOs.Pagination;
 using API.DTOs.Validators;
 using API.Helpers;
 using API.Interfaces;
+using API.Middleware;
 using API.QuartzCore;
 using API.Repositories;
 using API.SignalR;
@@ -25,6 +26,7 @@ namespace API.Extensions
             services.AddScoped<IExternalClientContext, ExternalClientContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IHubRepository, HubRepository>();
+            services.AddScoped<ErrorHandlingMiddleware>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddDbContext<DataContext>(options =>
             {

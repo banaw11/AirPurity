@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using API.SignalR;
 using FluentValidation.AspNetCore;
+using API.Middleware;
 
 namespace API
 {
@@ -56,7 +57,7 @@ namespace API
             app.UseRouting();
 
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
-
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();

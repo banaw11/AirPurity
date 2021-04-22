@@ -2,6 +2,7 @@
 using API.DTOs.ClientDTOs;
 using API.DTOs.Pagination;
 using API.Interfaces;
+using API.Middleware.Exceptions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -49,6 +50,8 @@ namespace API.Repositories
         {
             var city = await _context.Cities.Where(x => x.Name.ToLower() == cityName.ToLower())
                 .FirstOrDefaultAsync();
+
+            if(city is null) throw new NotFoundException($"City [{cityName}] not found");
 
             return _mapper.Map<CityClientDTO>(city);
         }

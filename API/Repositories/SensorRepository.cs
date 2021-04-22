@@ -2,6 +2,7 @@
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using API.Middleware.Exceptions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,7 +32,10 @@ namespace API.Repositories
 
         public async Task<ICollection<SensorDTO>> GetSensors(int stationId)
         {
-            return await _clientContext.GetSensorsAsync(stationId);
+            var sensors = await _clientContext.GetSensorsAsync(stationId);
+            if(!sensors.Any()) throw new NotFoundException($"Sensors for stationID [{stationId}] not found");
+
+            return sensors;
         }
 
         public async Task<ICollection<SensorDataDTO>> GetSensorsData(int stationId)
