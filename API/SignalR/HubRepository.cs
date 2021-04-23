@@ -1,6 +1,6 @@
-﻿using API.Interfaces;
+﻿using API.DTOs.Pagination;
+using API.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,8 +38,19 @@ namespace API.SignalR
 
         public async Task RefreshStationData(ClientDto clientDto)
         {
-            var sensorsData = await _unitOfWork.SensorRepository.GetSensorsData(clientDto.StationId);
-            await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedAirData", sensorsData);
+            var sensorsDataQuery = new SensorsDataQuery()
+            {
+                stationId = clientDto.StationId,
+                Range = RangeOfData.LATEST
+            };
+
+            var sensorsLatestData = await _unitOfWork.SensorRepository.GetSensorsData(sensorsDataQuery);
+            await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedLatestAirData", sensorsLatestData);
+
+            sensorsDataQuery.Range = RangeOfData.DAY;
+            var sensorsDailyData = await _unitOfWork.SensorRepository.GetSensorsData(sensorsDataQuery);
+            await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedLatestAirData", sensorsDailyData);
+
 
             var stationState = await _unitOfWork.StationRepository.GetStationState(clientDto.StationId);
             await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedAirQuality", stationState);

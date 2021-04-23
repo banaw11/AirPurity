@@ -68,6 +68,7 @@ namespace API.Extensions
 
             });
             services.AddScoped<IValidator<CityQuery>, CityQueryValidator>();
+            services.AddScoped<IValidator<SensorsDataQuery>, SensorsDataQueryValidator>();
             services.AddHttpClient("gios", x =>
             {
                 x.BaseAddress = new Uri("http://api.gios.gov.pl/pjp-api/rest/");

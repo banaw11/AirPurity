@@ -2,13 +2,11 @@
 using System.Net.Http.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using API.Entities;
-using System.Text.Json;
 using API.Interfaces;
 using API.DTOs;
 using System.Linq;
+using API.Middleware.Exceptions;
 
 namespace API.Repositories
 {
@@ -26,25 +24,37 @@ namespace API.Repositories
         public async Task<ICollection<MeasureDTO>> GetMeasures(int sensorId)
         {
             var measureData = await _client.GetFromJsonAsync<MeasureDataDTO>("data/getData/" + sensorId);
+            if(measureData is null) throw new NotFoundException($"Not found data for sensorId [{sensorId}]");
+
             DateTime currentDate = DateTime.UtcNow.ToUniversalTime().AddHours(2).AddDays(-1);
-            return measureData.Values.Where(x => x.Value != null && x.DateFormat >= currentDate).ToList();
+            var measuresDTO = measureData.Values.Where(x => x.Value != null && x.DateFormat >= currentDate).ToList();
+
+            return measuresDTO;
         }
 
         public async Task<ICollection<SensorDTO>> GetSensorsAsync(int stationId)
         {
-            return await _client.GetFromJsonAsync<ICollection<SensorDTO>>("station/sensors/" + stationId);
+            var sensorsDTO = await _client.GetFromJsonAsync<ICollection<SensorDTO>>("station/sensors/" + stationId);
+            if(!sensorsDTO.Any()) throw new NotFoundException($"Not found sensors for stationId [{stationId}]");
+
+            return sensorsDTO;
         }
 
         public async Task<ICollection<StationDTO>> GetStationsAsync()
         {
-
-            return await _client.GetFromJsonAsync<ICollection<StationDTO>>("station/findAll");
+            var stationsDTO = await _client.GetFromJsonAsync<ICollection<StationDTO>>("station/findAll");
+            if(!stationsDTO.Any()) throw new NotFoundException("Not found any stations from external API");
+            
+            return stationsDTO;
             
         }
 
         public async Task<StationStateDTO> GetStationState(int stationId)
         {
-            return await _client.GetFromJsonAsync<StationStateDTO>("aqindex/getIndex/" + stationId);
+            var stationStateDTO = await _client.GetFromJsonAsync<StationStateDTO>("aqindex/getIndex/" + stationId);
+            if(stationStateDTO is null) throw new NotFoundException($"Not found data for stationId [{stationId}]");
+
+            return stationStateDTO;
         }
     }
 }

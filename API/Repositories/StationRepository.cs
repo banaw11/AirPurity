@@ -6,7 +6,6 @@ using API.Interfaces;
 using API.Middleware.Exceptions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -62,13 +61,18 @@ namespace API.Repositories
             var station = await _context.Stations.Where(x => x.Id == stationId).FirstOrDefaultAsync();
             if(station is null) throw new NotFoundException($"Station with ID [{stationId}] not found");
 
-            var stationDTO = 
-            return  _mapper.Map<StationClientDTO>(station);
+            var stationDTO = _mapper.Map<StationClientDTO>(station);
+            return  stationDTO;
         }
 
         public async Task<StationStateDTO> GetStationState(int stationId)
         {
-            return await _clientContext.GetStationState(stationId);
+            var station = await GetStationsByIdAsync(stationId);
+            if(station is null) throw new NotFoundException($"Station with ID [{stationId}] not found");
+
+            var stationState = await _clientContext.GetStationState(stationId);
+
+            return stationState;
         }
     }
 }

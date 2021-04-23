@@ -1,11 +1,11 @@
 ﻿using API.Data;
 using API.DTOs;
+using API.DTOs.Pagination;
 using API.Entities;
 using API.Interfaces;
 using API.Middleware.Exceptions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,16 +38,21 @@ namespace API.Repositories
             return sensors;
         }
 
-        public async Task<ICollection<SensorDataDTO>> GetSensorsData(int stationId)
+        public async Task<ICollection<SensorDataDTO>> GetSensorsData(SensorsDataQuery query)
         {
-            var sensorsData = _mapper.Map<ICollection<SensorDataDTO>>(await GetSensors(stationId));
+            var sensorsData = _mapper.Map<ICollection<SensorDataDTO>>(await GetSensors(query.stationId));
 
             foreach (var sensorData in sensorsData)
             {
                 var values = await _clientContext.GetMeasures(sensorData.Id);
-                sensorData.Values = values.Where(x => x.Value != null)
-                    .OrderByDescending(x => x.DateFormat)
-                    .ToList();
+                var measuresQuery = values.Where(x => x.Value != null)
+                    .OrderByDescending(x => x.DateFormat);
+                
+                sensorData.Values = new List<MeasureDTO>();
+                if(query.Range == RangeOfData.LATEST)
+                    sensorData.Values.Add(measuresQuery.FirstOrDefault());
+                else
+                    sensorData.Values = measuresQuery.ToList();
             }
 
             return sensorsData;

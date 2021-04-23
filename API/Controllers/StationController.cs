@@ -2,9 +2,7 @@
 using API.DTOs.ClientDTOs;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -29,7 +27,8 @@ namespace API.Controllers
         }
         
         [HttpGet]
-        public async Task<StationClientDTO> GetStation([FromQuery] int stationId){
+        public async Task<StationClientDTO> GetStation([FromQuery] int stationId)
+        {
             var station = await _unitOfWork.StationRepository.GetStationsByIdAsync(stationId);
 
             return await Task.FromResult(station);
