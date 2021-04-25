@@ -3,7 +3,6 @@ using API.DTOs.Pagination;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -22,9 +21,8 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<ProvinceFormDTO>>> GetCitiesAsync([FromQuery] CityQuery query)
         {
             var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
-            if(proviences.Any())
-                return Ok(proviences);
-            return BadRequest("Failed during load data");
+            
+            return Ok(proviences);
         }
 
         [HttpGet]

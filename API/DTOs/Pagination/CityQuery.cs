@@ -8,17 +8,17 @@ namespace API.DTOs.Pagination
         public string ProvinceName
         {
             get { return _provinceName; } 
-            set { _provinceName = value.ToUpper(); } 
+            set { _provinceName = value == null? value : value.ToUpper(); } 
         }
         public string DistrictName 
         { 
             get{ return _districtName;} 
-            set { _districtName = value.ToUpper(); } 
+            set { _districtName =  value == null? value : value.ToUpper(); } 
         }
         public string CommuneName 
         { 
             get { return _communeName; } 
-            set { _communeName = value.ToUpper(); } 
+            set { _communeName =  value == null? value : value.ToUpper(); } 
         }
     }
 }

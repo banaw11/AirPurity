@@ -25,22 +25,17 @@ namespace API.Repositories
         public async Task<IEnumerable<ProvinceFormDTO>> GetCitiesAsync(CityQuery query)
         {
             var provinces = await _context.Provinces
-                .Where(p =>  p.ProvinceName == query.ProvinceName || 
-                    query.ProvinceName == null)
                 .Include(p => p.Districts
-                    .Where(d => d.DistrictName == query.DistrictName ||
-                        (query.DistrictName == null &&
-                        query.ProvinceName != null)))
+                    .Where(d => query.ProvinceName != null &&
+                        d.Province.ProvinceName == query.ProvinceName))
                 .ThenInclude(d => d.Communes
-                    .Where(c => c.CommuneName == query.CommuneName ||
-                        (query.CommuneName == null  && 
-                        query.ProvinceName != null && 
-                        query.DistrictName != null)))
+                    .Where(c => query.DistrictName != null &&
+                        c.District.DistrictName == query.DistrictName))
                 .ThenInclude(c => c.Cities
-                    .Where(c => query.ProvinceName != null && 
-                        query.DistrictName != null && 
-                        query.CommuneName != null))
+                    .Where(c => query.CommuneName != null &&
+                         c.Commune.CommuneName == query.CommuneName))
                 .ToListAsync();
+
 
             var provincesDTO = _mapper.Map<IEnumerable<ProvinceFormDTO>>(provinces);
             return provincesDTO;

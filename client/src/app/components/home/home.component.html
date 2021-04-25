@@ -15,24 +15,24 @@
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <label class="label">Województwo :</label>
                 <nb-select formControlName="provinceControl" status="control" shape="semi-round">
-                    <nb-option *ngFor="let province of provinces" [value]="province.name">
-                        {{province.name}}
+                    <nb-option *ngFor="let province of provinces" [value]="province.provinceName">
+                        {{province.provinceName}}
                     </nb-option>
                 </nb-select>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <label class="label">Powiat :</label>
-                <nb-select formControlName="districtControl" status="control" shape="semi-round">
-                    <nb-option *ngFor="let district of districts" [value]="district.name">
-                        {{district.name}}
+                <nb-select formControlName="districtControl" status="control" shape="semi-round" >
+                    <nb-option *ngFor="let district of districts" [value]="district.districtName">
+                        {{district.districtName}}
                     </nb-option>
                 </nb-select>
             </div>
             <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
                 <label class="label">Gmina :</label>
-                <nb-select formControlName="communeControl" status="control" shape="semi-round" >
-                    <nb-option *ngFor="let commune of communes" [value]="commune.name">
-                        {{commune.name}}
+                <nb-select formControlName="communeControl" status="control" shape="semi-round">
+                    <nb-option *ngFor="let commune of communes" [value]="commune.communeName">
+                        {{commune.communeName}}
                     </nb-option>
                 </nb-select>
             </div>
