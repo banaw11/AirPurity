@@ -48,10 +48,11 @@ namespace API.Repositories
 
         public async Task<CityClientDTO> GetCityByNameAsync(string cityName)
         {
-            var city = await _context.Cities.Where(x => x.Name.ToLower() == cityName.ToLower())
+            var city = await _context.Cities.Where(x => x.Name == cityName.ToUpper())
+                .Include(c => c.Stations)
                 .FirstOrDefaultAsync();
 
-            if(city is null) throw new NotFoundException($"City [{cityName}] not found");
+           if(city == null) throw new NotFoundException($"City [{cityName}] not found");
 
             return _mapper.Map<CityClientDTO>(city);
         }

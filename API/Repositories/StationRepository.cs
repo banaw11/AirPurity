@@ -25,37 +25,6 @@ namespace API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<City> GetCityByNameAsync(string cityName)
-        {
-            var city = await _context.Cities.Where(x => x.Name.ToLower() == cityName.ToLower())
-                .Include(x => x.Stations)
-                .Include(x => x.Commune)
-                .FirstOrDefaultAsync();
-
-           if(city is null) throw new NotFoundException($"City [{cityName}] not found");
-
-            return city;
-        }
-
-        public async Task<int> GetCityIdByNameAsync(string cityName)
-        {
-            var city = await _context.Cities
-                .Where(x => x.Name.ToLower() == cityName.ToLower())
-                .FirstOrDefaultAsync();
-
-            if(city is null) throw new NotFoundException($"City [{cityName}] not found");
-
-            return city.Id;
-        }
-
-        public async Task<ICollection<StationClientDTO>> GetStationsByCityAsync(string cityName)
-        {
-            var city = await GetCityByNameAsync(cityName);
-            var stations = _mapper.Map<ICollection<StationClientDTO>>(city.Stations);
-
-            return stations;
-        }
-
         public async Task<StationClientDTO> GetStationsByIdAsync(int stationId)
         {
             var station = await _context.Stations.Where(x => x.Id == stationId).FirstOrDefaultAsync();

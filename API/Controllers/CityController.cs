@@ -18,6 +18,7 @@ namespace API.Controllers
         }
 
         [HttpGet("All")]
+        [ResponseCache(Duration = 1800, VaryByQueryKeys = new []{"provinceName","districtName","communeName"})]
         public async Task<ActionResult<IEnumerable<ProvinceFormDTO>>> GetCitiesAsync([FromQuery] CityQuery query)
         {
             var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
@@ -27,14 +28,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 300, VaryByQueryKeys = new []{"cityName"})]
         public async Task<ActionResult<CityClientDTO>> GetCityAsync([FromQuery] string cityName)
         {
             var city = await _unitOfWork.CityRepository.GetCityByNameAsync(cityName);
-            city.Stations = await _unitOfWork.StationRepository.GetStationsByCityAsync(cityName);
-            if (city != null)
-                return Ok(city);
 
-            return BadRequest("City not found");
+            return city;
         }
     }
 }
