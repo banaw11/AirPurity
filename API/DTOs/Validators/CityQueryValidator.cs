@@ -14,10 +14,10 @@ namespace API.DTOs.Validators
                 .WithMessage(q =>  $"Provience [{q.ProvinceName}] does not exist in database");
             RuleFor(q => q.DistrictName)
                 .Must(value => dbContext.Districts.Any(p => p.DistrictName == value) || string.IsNullOrEmpty(value))
-                .WithMessage(q =>  $"Provience [{q.DistrictName}] does not exist in database");
+                .WithMessage(q =>  $"District [{q.DistrictName}] does not exist in database");
             RuleFor(q => q.CommuneName)
                 .Must(value => dbContext.Communes.Any(p => p.CommuneName == value) || string.IsNullOrEmpty(value) )
-                .WithMessage(q =>  $"Provience [{q.ProvinceName}] does not exist in database");
+                .WithMessage(q =>  $"Commune [{q.CommuneName}] does not exist in database");
         }
     }
 }
