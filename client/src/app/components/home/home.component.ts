@@ -5,6 +5,7 @@ import { CityDTO } from 'src/app/models/formDTOs/cityDTO';
 import { CommuneDTO } from 'src/app/models/formDTOs/communeDTO';
 import { DistrictDTO } from 'src/app/models/formDTOs/districtDTO';
 import { ProvinceDTO } from 'src/app/models/formDTOs/provinceDTO';
+import { CityQuery } from 'src/app/models/QueryParams/city-query';
 import { BusyService } from 'src/app/services/busy.service';
 import { CityService } from 'src/app/services/city.service';
 
@@ -18,13 +19,19 @@ export class HomeComponent implements OnInit {
   cityForm: FormGroup;
   
   provinces: ProvinceDTO[] = [];
+  provience: ProvinceDTO = null;
   districts: DistrictDTO[] = [];
   communes: CommuneDTO[] =[];
   cities: CityDTO[] = [];
+  cityQuery: CityQuery ={ 
+    provinceName: null,
+    districtName: null,
+    communeName:null
+  }
 
 
   constructor(private fb: FormBuilder, private cityService: CityService, private router: Router, public busyService: BusyService) { 
-    this.cityService.getCities();
+    this.cityService.getCities(this.cityQuery);
     this.cityForm = this.fb.group({
       provinceControl: [{value: null}],
       districtControl: [{value: null, disabled: true}],
@@ -34,14 +41,38 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cityService.citiesForm$.subscribe(proviences => this.provinces=proviences.sort((a,b) => a.name.localeCompare(b.name)));
+    this.cityService.citiesForm$.subscribe(provinces => {
+      this.provinces = provinces;
+      if(provinces.length>0){
+        provinces.forEach(p => {
+          if(p.provinceName === this.cityQuery.provinceName){
+            this.districts = p.districts;
+            p.districts.forEach(d => {
+              if(d.districtName === this.cityQuery.districtName){
+                this.communes = d.communes;
+                d.communes.forEach(c => {
+                  if(c.communeName === this.cityQuery.communeName )
+                  {
+                    this.cities = c.cities;
+                  }
+                })
+              }
+            })
+          }
+        })
+        
+      }
+      
+    });
     this.cityForm.get('provinceControl').valueChanges.subscribe(x => x != null ? this.provinceSelected(x): null);
     this.cityForm.get('districtControl').valueChanges.subscribe(x => x != null ? this.districtSelected(x): null);
     this.cityForm.get('communeControl').valueChanges.subscribe(x => x != null ? this.communeSelected(x): null);
   }
 
   provinceSelected(event: any){
-    this.districts = this.provinces.find(x => x.name === event).districts.sort((a,b) => a.name.localeCompare(b.name));
+    this.cityQuery.provinceName = event;
+    this.cityService.getCities(this.cityQuery);
+
     this.cityForm.controls.districtControl.setValue(null);
     this.cityForm.controls.communeControl.setValue(null);
     this.cityForm.controls.cityControl.setValue(null);
@@ -55,9 +86,11 @@ export class HomeComponent implements OnInit {
     this.cityForm.controls.cityControl.disable();
     
   }
+
   districtSelected(event: any){
-    this.communes = this.provinces.find(x => x.name === this.cityForm.controls.provinceControl.value)
-      .districts.find(x => x.name === event).communes.sort((a,b) => a.name.localeCompare(b.name));
+    this.cityQuery.districtName = event;
+    this.cityService.getCities(this.cityQuery);
+
     this.cityForm.controls.communeControl.setValue(null);
     this.cityForm.controls.cityControl.setValue(null);
     if(event != null){
@@ -69,10 +102,11 @@ export class HomeComponent implements OnInit {
     this.cityForm.controls.cityControl.disable();
     
   }
+
   communeSelected(event: any){
-    this.cities = this.provinces.find(x => x.name === this.cityForm.controls.provinceControl.value).districts.find(
-      x => x.name === this.cityForm.controls.districtControl.value)
-        .communes.find(x => x.name === event).cities.sort((a,b) => a.name.localeCompare(b.name));
+    this.cityQuery.communeName = event;
+    this.cityService.getCities(this.cityQuery);
+    
     this.cityForm.controls.cityControl.setValue(null);
     if(event != null){
       this.cityForm.controls.cityControl.enable();
@@ -82,9 +116,13 @@ export class HomeComponent implements OnInit {
     }
   }
 
+
   citySelected(){
     this.router.navigateByUrl("/city/"+this.cityForm.controls.cityControl.value)
   }
+
+
+
 
 
 }

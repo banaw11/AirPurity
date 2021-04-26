@@ -1,6 +1,6 @@
 import { CommuneDTO } from "./communeDTO";
 
 export interface DistrictDTO{
-    name: string,
+    districtName: string,
     communes: CommuneDTO[]
 }

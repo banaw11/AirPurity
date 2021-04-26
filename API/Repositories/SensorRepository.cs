@@ -40,7 +40,7 @@ namespace API.Repositories
 
         public async Task<ICollection<SensorDataDTO>> GetSensorsData(SensorsDataQuery query)
         {
-            var sensorsData = _mapper.Map<ICollection<SensorDataDTO>>(await GetSensors(query.stationId));
+            var sensorsData = _mapper.Map<ICollection<SensorDataDTO>>(await GetSensors(query.StationId));
 
             foreach (var sensorData in sensorsData)
             {
