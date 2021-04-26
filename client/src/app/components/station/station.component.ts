@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Range } from 'src/app/models/QueryParams/Range';
+import { SensorsDataQuery } from 'src/app/models/QueryParams/sensorsData-query';
 import { BusyService } from 'src/app/services/busy.service';
 import { OnlineClientService } from 'src/app/services/online-client.service';
 import { SensorService } from 'src/app/services/sensor.service';
@@ -16,6 +18,7 @@ export class StationComponent implements OnInit, OnDestroy {
   stationId : number
   cityName: string;
 
+
   constructor(public stationService: StationService, public sensorService: SensorService, private onlineService: OnlineClientService, private router: Router,
      private route: ActivatedRoute, public busyService: BusyService) {
       this.sub = this.route.queryParams.subscribe(params => {
@@ -28,9 +31,10 @@ export class StationComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
   ngOnInit(): void {
+    const query: SensorsDataQuery = {stationId: this.stationId, range: Range.DAY};
     this.onlineService.createHubConnection(this.stationId);
     this.stationService.getStation(this.stationId);
-    this.sensorService.getSensorsData(this.stationId);
+    this.sensorService.getSensorsData(query);
   }
  
 

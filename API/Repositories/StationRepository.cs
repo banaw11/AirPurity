@@ -3,9 +3,9 @@ using API.DTOs;
 using API.DTOs.ClientDTOs;
 using API.Entities;
 using API.Interfaces;
+using API.Middleware.Exceptions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,37 +25,23 @@ namespace API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<City> GetCityByNameAsync(string cityName)
-        {
-            return await _context.Cities.Where(x => x.Name.ToLower() == cityName.ToLower())
-                .Include(x => x.Stations)
-                .Include(x => x.Commune)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<int> GetCityIdByNameAsync(string cityName)
-        {
-            return await _context.Cities
-                .Where(x => x.Name.ToLower() == cityName.ToLower())
-                .Select(x => x.Id)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<ICollection<StationClientDTO>> GetStationsByCityAsync(string cityName)
-        {
-            var city = await GetCityByNameAsync(cityName);
-            return _mapper.Map<ICollection<StationClientDTO>>(city.Stations);
-        }
-
         public async Task<StationClientDTO> GetStationsByIdAsync(int stationId)
         {
             var station = await _context.Stations.Where(x => x.Id == stationId).FirstOrDefaultAsync();
-            return  _mapper.Map<StationClientDTO>(station);
+            if(station is null) throw new NotFoundException($"Station with ID [{stationId}] not found");
+
+            var stationDTO = _mapper.Map<StationClientDTO>(station);
+            return  stationDTO;
         }
 
         public async Task<StationStateDTO> GetStationState(int stationId)
         {
-            return await _clientContext.GetStationState(stationId);
+            var station = await GetStationsByIdAsync(stationId);
+            if(station is null) throw new NotFoundException($"Station with ID [{stationId}] not found");
+
+            var stationState = await _clientContext.GetStationState(stationId);
+
+            return stationState;
         }
     }
 }

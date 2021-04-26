@@ -1,9 +1,13 @@
 ﻿using API.Data;
+using API.DTOs.Pagination;
+using API.DTOs.Validators;
 using API.Helpers;
 using API.Interfaces;
+using API.Middleware;
 using API.QuartzCore;
 using API.Repositories;
 using API.SignalR;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +26,7 @@ namespace API.Extensions
             services.AddScoped<IExternalClientContext, ExternalClientContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IHubRepository, HubRepository>();
+            services.AddScoped<ErrorHandlingMiddleware>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddDbContext<DataContext>(options =>
             {
@@ -59,9 +64,11 @@ namespace API.Extensions
                 // Whether the connection string came from the local development configuration file
                 // or from the environment variable from Heroku, use it to set up your DbContext.
                  options.UseNpgsql(connStr);
-                //options.UseSqlite(connStr);
+                //options.UseSqlite(connStr).EnableSensitiveDataLogging();
 
             });
+            services.AddScoped<IValidator<CityQuery>, CityQueryValidator>();
+            services.AddScoped<IValidator<SensorsDataQuery>, SensorsDataQueryValidator>();
             services.AddHttpClient("gios", x =>
             {
                 x.BaseAddress = new Uri("http://api.gios.gov.pl/pjp-api/rest/");
@@ -74,6 +81,7 @@ namespace API.Extensions
             services.AddSingleton(new Job(
                 type: typeof(RemidersJob),
                 expression: "0 5,15,30,45 * ? * *")); //every hour at minutes 5,15,30 and 45 
+            
 
             return services;
         }

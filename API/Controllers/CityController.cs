@@ -1,8 +1,8 @@
 ﻿using API.DTOs.ClientDTOs;
+using API.DTOs.Pagination;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -17,23 +17,21 @@ namespace API.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<ICollection<ProvinceFormDTO>>> GetCitiesAsync()
+        [ResponseCache(Duration = 1800, VaryByQueryKeys = new []{"provinceName","districtName","communeName"})]
+        public async Task<ActionResult<IEnumerable<ProvinceFormDTO>>> GetCitiesAsync([FromQuery] CityQuery query)
         {
-            var proviences = await _unitOfWork.CityRepository.GetCitiesAsync();
-            if(proviences.Any())
-                return Ok(proviences);
-            return BadRequest("Failed during load data");
+            var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
+            
+            return Ok(proviences);
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 300, VaryByQueryKeys = new []{"cityName"})]
         public async Task<ActionResult<CityClientDTO>> GetCityAsync([FromQuery] string cityName)
         {
             var city = await _unitOfWork.CityRepository.GetCityByNameAsync(cityName);
-            city.Stations = await _unitOfWork.StationRepository.GetStationsByCityAsync(cityName);
-            if (city != null)
-                return Ok(city);
 
-            return BadRequest("City not found");
+            return city;
         }
     }
 }

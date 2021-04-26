@@ -1,7 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using API.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace API.SignalR

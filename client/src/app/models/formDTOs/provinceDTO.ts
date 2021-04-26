@@ -1,6 +1,6 @@
 import { DistrictDTO } from "./districtDTO";
 
 export interface ProvinceDTO{
-    name: string,
+    provinceName: string,
     districts: DistrictDTO[]
 }

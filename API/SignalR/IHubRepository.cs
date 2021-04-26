@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.SignalR
@@ -9,6 +7,6 @@ namespace API.SignalR
     {
         Task RefreshStationData(ClientDto clientDto);
         ICollection<ClientDto> GetOnlineClients();
-        void RefreshClientsData();
+        Task RefreshClientsData();
     }
 }

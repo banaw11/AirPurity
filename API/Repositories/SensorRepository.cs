@@ -1,10 +1,11 @@
 ﻿using API.Data;
 using API.DTOs;
+using API.DTOs.Pagination;
 using API.Entities;
 using API.Interfaces;
+using API.Middleware.Exceptions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,22 +32,30 @@ namespace API.Repositories
 
         public async Task<ICollection<SensorDTO>> GetSensors(int stationId)
         {
-            return await _clientContext.GetSensorsAsync(stationId);
+            var sensors = await _clientContext.GetSensorsAsync(stationId);
+            if(!sensors.Any()) throw new NotFoundException($"Sensors for stationID [{stationId}] not found");
+
+            return sensors;
         }
 
-        public async Task<ICollection<SensorDataDTO>> GetSensorsData(int stationId)
+        public async Task<ICollection<SensorDataDTO>> GetSensorsData(SensorsDataQuery query)
         {
-            var sensorsData = _mapper.Map<ICollection<SensorDataDTO>>(await GetSensors(stationId));
+            var sensorsData = _mapper.Map<ICollection<SensorDataDTO>>(await GetSensors(query.StationId));
 
             foreach (var sensorData in sensorsData)
             {
                 var values = await _clientContext.GetMeasures(sensorData.Id);
-                sensorData.Values = values.Where(x => x.Value != null)
-                    .OrderByDescending(x => x.DateFormat)
-                    .ToList();
+                
+                sensorData.Values = new List<MeasureDTO>();
+                if(query.Range == RangeOfData.LATEST)
+                    sensorData.Values.Add(values.FirstOrDefault());
+                else
+                    sensorData.Values = values;
             }
 
-            return sensorsData;
+            var sensorsDataDTO = sensorsData.Where(s => s.Values.Count() > 0).ToList();
+
+            return sensorsDataDTO;
         }
     }
 }

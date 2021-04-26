@@ -1,12 +1,9 @@
-﻿using API.Data;
-using API.DTOs;
+﻿using API.DTOs;
+using API.DTOs.Pagination;
 using API.Entities;
 using API.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -21,15 +18,15 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<SensorDataDTO>> GetAirData([FromQuery] int stationId)
+        public async Task<ICollection<SensorDataDTO>> GetAirData([FromQuery] SensorsDataQuery query)
         {
 
-            var sensorsData = await _unitOfWork.SensorRepository.GetSensorsData(stationId);
+            var sensorsData = await _unitOfWork.SensorRepository.GetSensorsData(query);
 
             return await Task.FromResult(sensorsData);
             
         }
-
+        
         [HttpGet("quality")]
         public async Task<StationStateDTO> GetAirQuality([FromQuery] int stationId)
         {
@@ -39,9 +36,12 @@ namespace API.Controllers
         }
 
         [HttpGet("norms")]
+        [ResponseCache(Duration = 1800)]
         public async Task<ICollection<Norm>> GetNorms()
         {
-            return await _unitOfWork.SensorRepository.GetNormsAsync();
+            var norms = await _unitOfWork.SensorRepository.GetNormsAsync();
+            
+            return await Task.FromResult(norms);
         }
     }
 }

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Measure } from '../models/measure';
 import { Norm } from '../models/norm';
+import { SensorsDataQuery } from '../models/QueryParams/sensorsData-query';
 import { Sensor } from '../models/sensor';
 import { StationData } from '../models/stationData';
 import { StationService } from './station.service';
@@ -38,9 +39,14 @@ export class SensorService {
     })
    }
 
-  getSensorsData(stationId){
+  getSensorsData(query: SensorsDataQuery){
     this.getNorms();
-    this.http.get<StationData[]>(this.apiUrl+"air?stationId="+stationId).subscribe((stationData: StationData[]) => {
+    this.http.get<StationData[]>(this.apiUrl+"air", {
+      params: {
+        stationId: query.stationId.toString(),
+        range: query.range.toString()
+      }
+    }).subscribe((stationData: StationData[]) => {
      this.updateStationData(stationData);
    })
   }
