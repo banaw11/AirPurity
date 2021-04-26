@@ -36,6 +36,7 @@ namespace API.Controllers
         }
 
         [HttpGet("norms")]
+        [ResponseCache(Duration = 1800)]
         public async Task<ICollection<Norm>> GetNorms()
         {
             var norms = await _unitOfWork.SensorRepository.GetNormsAsync();

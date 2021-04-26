@@ -9,9 +9,9 @@ namespace API.DTOs.Validators
     {
         public SensorsDataQueryValidator(DataContext dbContext)
         {
-            RuleFor(q => q.stationId)
+            RuleFor(q => q.StationId)
                 .Must(value => dbContext.Stations.Any(s => s.Id == value))
-                .WithMessage(q => $"Station with id [{q.stationId}] does not exist in database");
+                .WithMessage(q => $"Station with id [{q.StationId}] does not exist in database");
             RuleFor(q => q.Range).IsInEnum();
         }
     }

@@ -40,16 +40,12 @@ namespace API.SignalR
         {
             var sensorsDataQuery = new SensorsDataQuery()
             {
-                stationId = clientDto.StationId,
-                Range = RangeOfData.LATEST
+                StationId = clientDto.StationId,
+                Range = RangeOfData.DAY
             };
 
-            var sensorsLatestData = await _unitOfWork.SensorRepository.GetSensorsData(sensorsDataQuery);
-            await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedLatestAirData", sensorsLatestData);
-
-            sensorsDataQuery.Range = RangeOfData.DAY;
             var sensorsDailyData = await _unitOfWork.SensorRepository.GetSensorsData(sensorsDataQuery);
-            await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedLatestAirData", sensorsDailyData);
+            await _hubContext.Clients.Client(clientDto.ConnectionId).SendAsync("RefreshedAirData", sensorsDailyData);
 
 
             var stationState = await _unitOfWork.StationRepository.GetStationState(clientDto.StationId);
