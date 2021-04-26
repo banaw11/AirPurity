@@ -39,8 +39,8 @@ namespace API.Extensions
                 if (env == "Development")
                 {
                     // Use connection string from file.
-                    // connStr = config.GetConnectionString("DefaultConnection");
-                    connStr = config.GetConnectionString("SqLiteConnection");
+                     connStr = config.GetConnectionString("DefaultConnection");
+                    //connStr = config.GetConnectionString("SqLiteConnection");
                 }
                 else
                 {
@@ -63,8 +63,8 @@ namespace API.Extensions
 
                 // Whether the connection string came from the local development configuration file
                 // or from the environment variable from Heroku, use it to set up your DbContext.
-                // options.UseNpgsql(connStr);
-                options.UseSqlite(connStr).EnableSensitiveDataLogging();
+                 options.UseNpgsql(connStr);
+                //options.UseSqlite(connStr).EnableSensitiveDataLogging();
 
             });
             services.AddScoped<IValidator<CityQuery>, CityQueryValidator>();

@@ -45,17 +45,17 @@ namespace API.Repositories
             foreach (var sensorData in sensorsData)
             {
                 var values = await _clientContext.GetMeasures(sensorData.Id);
-                var measuresQuery = values.Where(x => x.Value != null)
-                    .OrderByDescending(x => x.DateFormat);
                 
                 sensorData.Values = new List<MeasureDTO>();
                 if(query.Range == RangeOfData.LATEST)
-                    sensorData.Values.Add(measuresQuery.FirstOrDefault());
+                    sensorData.Values.Add(values.FirstOrDefault());
                 else
-                    sensorData.Values = measuresQuery.ToList();
+                    sensorData.Values = values;
             }
 
-            return sensorsData;
+            var sensorsDataDTO = sensorsData.Where(s => s.Values.Count() > 0).ToList();
+
+            return sensorsDataDTO;
         }
     }
 }

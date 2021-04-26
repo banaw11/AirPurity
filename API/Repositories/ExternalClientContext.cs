@@ -26,8 +26,18 @@ namespace API.Repositories
             var measureData = await _client.GetFromJsonAsync<MeasureDataDTO>("data/getData/" + sensorId);
             if(measureData is null) throw new NotFoundException($"Not found data for sensorId [{sensorId}]");
 
-            DateTime currentDate = DateTime.UtcNow.ToUniversalTime().AddHours(2).AddDays(-1);
-            var measuresDTO = measureData.Values.Where(x => x.Value != null && x.DateFormat >= currentDate).ToList();
+            DateTime currentDate = DateTime.UtcNow.ToUniversalTime().AddHours(2);
+            var lastMeasureDate = measureData.Values.Count > 0 ?
+                measureData.Values
+                    .OrderByDescending(m => m.DateFormat)
+                    .Select(m => m.DateFormat)
+                    .FirstOrDefault() :
+                currentDate;
+
+            lastMeasureDate = lastMeasureDate.AddDays(-1);
+
+            var measuresDTO = measureData.Values.Where(x => x.Value != null &&
+                 x.DateFormat >= lastMeasureDate).ToList();
 
             return measuresDTO;
         }

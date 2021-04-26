@@ -7,6 +7,6 @@ namespace API.SignalR
     {
         Task RefreshStationData(ClientDto clientDto);
         ICollection<ClientDto> GetOnlineClients();
-        void RefreshClientsData();
+        Task RefreshClientsData();
     }
 }

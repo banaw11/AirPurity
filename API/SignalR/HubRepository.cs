@@ -25,7 +25,7 @@ namespace API.SignalR
             return _onlineTracker.GetOnlineClients();
         }
 
-        public async void RefreshClientsData()
+        public async Task RefreshClientsData()
         {
             var clientsDto = GetOnlineClients();
 
