@@ -30,8 +30,7 @@ namespace API.Helpers
             CreateMap<SensorDTO, SensorDataDTO>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.Id))
                 .ForMember(x => x.ParamCode, opt => opt.MapFrom(x => x.Param.ParamCode))
-                .ForMember(x => x.ParamName, opt => opt.MapFrom(x => x.Param.ParamName))
-                .ForAllOtherMembers(x => x.Ignore());
+                .ForMember(x => x.ParamName, opt => opt.MapFrom(x => x.Param.ParamName));
 
             CreateMap<City, CityClientDTO>();
             CreateMap<Station, StationClientDTO>();
