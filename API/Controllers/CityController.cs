@@ -1,37 +1,35 @@
-﻿using API.DTOs.ClientDTOs;
-using API.DTOs.Pagination;
-using API.Interfaces;
+﻿using API.DTOs.Pagination;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System;
 
 namespace API.Controllers
 {
     public class CityController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CityController(IUnitOfWork unitOfWork)
+        public CityController()
         {
-            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("All")]
         [ResponseCache(Duration = 1800, VaryByQueryKeys = new []{"provinceName","districtName","communeName"})]
-        public async Task<ActionResult<IEnumerable<ProvinceFormDTO>>> GetCitiesAsync([FromQuery] CityQuery query)
+        public IActionResult GetCitiesAsync([FromQuery] CityQuery query)
         {
-            var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
+            //var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
             
-            return Ok(proviences);
+            //return Ok(proviences);
+
+            throw new NotImplementedException();
         }
 
         [HttpGet]
         [ResponseCache(Duration = 300, VaryByQueryKeys = new []{"cityName"})]
-        public async Task<ActionResult<CityClientDTO>> GetCityAsync([FromQuery] string cityName)
+        public IActionResult GetCityAsync([FromQuery] string cityName)
         {
-            var city = await _unitOfWork.CityRepository.GetCityByNameAsync(cityName);
+            //var city = await _unitOfWork.CityRepository.GetCityByNameAsync(cityName);
 
-            return city;
+            //return city;
+
+            throw new NotImplementedException();
         }
     }
 }

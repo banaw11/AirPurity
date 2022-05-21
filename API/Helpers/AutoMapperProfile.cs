@@ -1,11 +1,7 @@
-﻿using API.DTOs;
+﻿using AirPurity.API.BusinessLogic.External.Models;
+using AirPurity.API.Data.Entities;
 using API.DTOs.ClientDTOs;
-using API.Entities;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Helpers
 {
@@ -13,21 +9,21 @@ namespace API.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<Station, StationDTO>()
+            CreateMap<Station, StationExternal>()
                 .ReverseMap()
                 .ForMember(x => x.City, opt => opt.Ignore());
 
-            CreateMap<City, CityDTO>()
+            CreateMap<City, CityExternal>()
                 .ReverseMap()
                 .ForMember(x => x.Commune, opt => opt.Ignore())
                 .ForMember(x => x.Name, opt => opt.MapFrom(c => c.Name.ToUpper()));
 
-            CreateMap<Commune, CommuneDTO>()
+            CreateMap<Commune, CommuneExternal>()
                 .ForMember(c => c.CommuneName, opt => opt.MapFrom(c => c.CommuneName.ToUpper()))
                 .ReverseMap()
                 .ForMember(c => c.CommuneName, opt => opt.MapFrom(c => c.CommuneName.ToUpper()));
 
-            CreateMap<SensorDTO, SensorDataDTO>()
+            CreateMap<SensorExternal, SensorData>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.Id))
                 .ForMember(x => x.ParamCode, opt => opt.MapFrom(x => x.Param.ParamCode))
                 .ForMember(x => x.ParamName, opt => opt.MapFrom(x => x.Param.ParamName));

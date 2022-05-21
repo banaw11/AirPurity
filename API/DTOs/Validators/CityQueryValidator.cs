@@ -1,5 +1,5 @@
 using System.Linq;
-using API.Data;
+using AirPurity.API.Data;
 using API.DTOs.Pagination;
 using FluentValidation;
 

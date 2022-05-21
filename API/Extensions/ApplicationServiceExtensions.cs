@@ -1,11 +1,16 @@
-﻿using API.Data;
+﻿using AirPurity.API.BusinessLogic.External.Interfaces;
+using AirPurity.API.BusinessLogic.External.Services;
+using AirPurity.API.BusinessLogic.Repositories;
+using AirPurity.API.BusinessLogic.Repositories.Interfaces;
+using AirPurity.API.BusinessLogic.Repositories.Repositories;
+using AirPurity.API.Data;
+using AirPurity.API.Interfaces;
+using AirPurity.API.Services;
 using API.DTOs.Pagination;
 using API.DTOs.Validators;
 using API.Helpers;
-using API.Interfaces;
 using API.Middleware;
 using API.QuartzCore;
-using API.Repositories;
 using API.SignalR;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +20,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using System;
+using System.Net.Http;
 
 namespace API.Extensions
 {
@@ -23,9 +29,19 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddSingleton<OnlineTracker>();
-            services.AddScoped<IExternalClientContext, ExternalClientContext>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IHubRepository, HubRepository>();
+            services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<CityRepository>();
+            services.AddScoped<CommuneRepository>();
+            services.AddScoped<DistrictRepository>();
+            services.AddScoped<NormRepository>();
+            services.AddScoped<ProvinceRepository>();
+            services.AddScoped<StationRepository>();
+            services.AddScoped<GiosHttpClientContext>();
+            services.AddScoped<GiosHttpClientService>();
+            services.AddScoped<IDictionaryService, DictionaryService>();
+            services.AddScoped<IStationService, StationService>();
+            services.AddScoped<ISensorService, SensorService>();
+            services.AddScoped<IHubService, HubService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddDbContext<DataContext>(options =>

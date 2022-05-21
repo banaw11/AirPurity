@@ -19,7 +19,7 @@ namespace API.QuartzCore
         {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var scopeContext = scope.ServiceProvider.GetRequiredService<IHubRepository>();
+                var scopeContext = scope.ServiceProvider.GetRequiredService<IHubService>();
                 scopeContext.RefreshClientsData();
             }
             return Task.CompletedTask;
