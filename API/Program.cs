@@ -23,7 +23,7 @@ namespace API
                 var context = services.GetRequiredService<DataContext>();
                 var clientContext = services.GetRequiredService<GiosHttpClientService>();
                 var mapper = services.GetRequiredService<IMapper>();
-                await context.Database.MigrateAsync();
+                await context.Database.EnsureCreatedAsync();
                 await Seed.SeedStations(clientContext, context, mapper);
             }
             catch(Exception ex)

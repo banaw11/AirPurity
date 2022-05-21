@@ -4,7 +4,7 @@
 
 namespace AirPurity.API.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,13 +12,14 @@ namespace AirPurity.API.Data.Migrations
                 name: "Norms",
                 columns: table => new
                 {
-                    ParamCode = table.Column<string>(type: "TEXT", nullable: false),
-                    ParamNorm = table.Column<double>(type: "REAL", nullable: false),
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ParamCode = table.Column<string>(type: "TEXT", nullable: true),
+                    ParamNorm = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Norms", x => x.ParamCode);
+                    table.PrimaryKey("PK_Norms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,17 +42,17 @@ namespace AirPurity.API.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DistrictName = table.Column<string>(type: "TEXT", nullable: true),
-                    ProvienceId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProvienceId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProvinceId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Districts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Districts_Provinces_ProvienceId",
-                        column: x => x.ProvienceId,
+                        name: "FK_Districts_Provinces_ProvinceId",
+                        column: x => x.ProvinceId,
                         principalTable: "Provinces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -128,9 +129,9 @@ namespace AirPurity.API.Data.Migrations
                 column: "DistrictId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Districts_ProvienceId",
+                name: "IX_Districts_ProvinceId",
                 table: "Districts",
-                column: "ProvienceId");
+                column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stations_CityId",

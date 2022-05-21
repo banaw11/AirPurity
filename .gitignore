@@ -440,6 +440,6 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-/API/Data/airpurity.db
-/API/Data/airpurity.db-shm
-/API/Data/airpurity.db-wal
+/AirPurity.API.Data/airpurity.db
+/AirPurity.API.Data/airpurity.db-shm
+/AirPurity.API.Data/airpurity.db-wal

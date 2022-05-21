@@ -78,7 +78,7 @@ namespace AirPurity.API.Data
 
             if(await context.Stations.AnyAsync() == false)
             {
-                var normsData = await System.IO.File.ReadAllTextAsync("Data/NormsSeed.json");
+                var normsData = await System.IO.File.ReadAllTextAsync("../AirPurity.API.Data/NormsSeed.json");
                 var norms = JsonSerializer.Deserialize<List<Norm>>(normsData);
 
                 context.Norms.AddRange(norms);
