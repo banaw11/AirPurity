@@ -2,6 +2,7 @@
 using AirPurity.API.BusinessLogic.External.Services;
 using AirPurity.API.BusinessLogic.Repositories;
 using AirPurity.API.BusinessLogic.Repositories.Interfaces;
+using AirPurity.API.BusinessLogic.Repositories.Repositories;
 using AirPurity.API.Data;
 using AirPurity.API.Interfaces;
 using AirPurity.API.Services;
@@ -30,11 +31,14 @@ namespace API.Extensions
             services.AddSingleton<OnlineTracker>();
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<CityRepository>();
+            services.AddScoped<CommuneRepository>();
+            services.AddScoped<DistrictRepository>();
             services.AddScoped<NormRepository>();
             services.AddScoped<ProvinceRepository>();
             services.AddScoped<StationRepository>();
             services.AddScoped<GiosHttpClientContext>();
             services.AddScoped<GiosHttpClientService>();
+            services.AddScoped<IDictionaryService, DictionaryService>();
             services.AddScoped<IStationService, StationService>();
             services.AddScoped<ISensorService, SensorService>();
             services.AddScoped<IHubService, HubService>();

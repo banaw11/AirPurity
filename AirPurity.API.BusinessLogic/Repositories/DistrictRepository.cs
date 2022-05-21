@@ -3,9 +3,9 @@ using AirPurity.API.Data.Entities;
 
 namespace AirPurity.API.BusinessLogic.Repositories.Repositories
 {
-    public class CityRepository : Repository<City>
+    public class DistrictRepository : Repository<District>
     {
-        public CityRepository(DataContext context) : base(context)
+        public DistrictRepository(DataContext context) : base(context)
         {
         }
     }

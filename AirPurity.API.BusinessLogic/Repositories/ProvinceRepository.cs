@@ -3,7 +3,7 @@ using AirPurity.API.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace AirPurity.API.BusinessLogic.Repositories
+namespace AirPurity.API.BusinessLogic.Repositories.Repositories
 {
     public class ProvinceRepository : Repository<Province>
     {
