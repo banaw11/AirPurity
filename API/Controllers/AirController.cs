@@ -1,47 +1,46 @@
-﻿using API.DTOs;
+﻿using AirPurity.API.Interfaces;
 using API.DTOs.Pagination;
-using API.Entities;
-using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     public class AirController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IStationService _stationService;
+        private readonly ISensorService _sensorService;
 
-        public AirController(IUnitOfWork unitOfWork)
+        public AirController(IStationService stationService, ISensorService sensorService)
         {
-            _unitOfWork = unitOfWork;
+            _stationService = stationService;
+            _sensorService = sensorService;
         }
 
         [HttpGet]
-        public async Task<ICollection<SensorDataDTO>> GetAirData([FromQuery] SensorsDataQuery query)
+        public async Task<IActionResult> GetAirData([FromQuery] SensorsDataQuery query)
         {
 
-            var sensorsData = await _unitOfWork.SensorRepository.GetSensorsData(query);
+            var sensorsData = await _sensorService.GetSensorsDataAsync(query);
 
-            return await Task.FromResult(sensorsData);
+            return Ok(sensorsData);
             
         }
         
         [HttpGet("quality")]
-        public async Task<StationStateDTO> GetAirQuality([FromQuery] int stationId)
+        public async Task<IActionResult> GetAirQuality([FromQuery] int stationId)
         {
-            var stationState = await _unitOfWork.StationRepository.GetStationState(stationId);
+            var stationState = await _stationService.GetStationStateAsync(stationId);
 
-            return await Task.FromResult(stationState);
+            return Ok(stationState);
         }
 
         [HttpGet("norms")]
         [ResponseCache(Duration = 1800)]
-        public async Task<ICollection<Norm>> GetNorms()
+        public IActionResult GetNorms()
         {
-            var norms = await _unitOfWork.SensorRepository.GetNormsAsync();
+            var norms = _sensorService.GetNorms();
             
-            return await Task.FromResult(norms);
+            return Ok(norms);
         }
     }
 }

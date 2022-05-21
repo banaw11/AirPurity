@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AirPurity.API.Common\AirPurity.API.Common.csproj" />
+    <ProjectReference Include="..\AirPurity.API.Data\AirPurity.API.Data.csproj" />
+  </ItemGroup>
+
+</Project>
