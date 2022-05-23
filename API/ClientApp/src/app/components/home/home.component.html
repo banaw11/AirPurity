@@ -1,0 +1,34 @@
+<nb-layout withScroll="false">
+    <nb-layout-header subheader fxLayout="column" >
+            <nb-actions >
+                <nb-action>
+                    <button nbButton outline status="primary" shape="semi-round">AirPurity</button>
+                </nb-action>
+                <nb-action> 
+                    <label class="label"> JAKOŚĆ POWIETRZA W POLSCE</label>
+                </nb-action>
+            </nb-actions>
+    </nb-layout-header>
+    <nb-layout-column fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" *ngIf="(busyService.isBusy$ |async) == false">
+        <h6>WYBIERZ MIASTO</h6>
+        <div [formGroup]="cityForm" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around" fxLayoutGap="5px">
+            
+             <div class="input-group">
+                <app-custom-dropdown [data]="provincesDictionary" [formControl]='cityForm.controls["province"]' [placeholder]="'Wybierz'" [label]="'Województwo'"></app-custom-dropdown>
+            </div>
+            <div class="input-group" >
+                <app-custom-dropdown [data]="districtsDictionary" [formControl]='cityForm.controls["district"]' [placeholder]="'Wybierz'" [label]="'Powiat'"></app-custom-dropdown>
+            </div>
+            <div class="input-group">
+                <app-custom-dropdown [data]="communesDictionary" [formControl]='cityForm.controls["commune"]' [placeholder]="'Wybierz'" [label]="'Gmina'"></app-custom-dropdown>
+            </div>
+            <div class="input-group">
+                <app-custom-dropdown [data]="citiesDictionary" [formControl]='cityForm.controls["city"]' [placeholder]="'Wybierz'" [label]="'Miasto'"></app-custom-dropdown>
+            </div>
+
+        </div> 
+        <div>
+            <button nbButton outline  status="success" shape="round" type="submit" (click)="citySelected()" >Zatwierdź</button>
+        </div>
+    </nb-layout-column>
+</nb-layout>

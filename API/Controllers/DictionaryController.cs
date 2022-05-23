@@ -22,7 +22,7 @@ namespace AirPurity.API.Controllers
 
             var responseModel = new ResponseModel(data: provinces);
 
-            return Ok(new JsonResult(responseModel));
+            return Ok(responseModel);
         }
 
         [HttpGet("address/get-districts")]
@@ -33,7 +33,7 @@ namespace AirPurity.API.Controllers
 
             var responseModel = new ResponseModel(data: districts);
 
-            return Ok(new JsonResult(responseModel));
+            return Ok(responseModel);
         }
 
         [HttpGet("address/get-communes")]
@@ -44,7 +44,7 @@ namespace AirPurity.API.Controllers
 
             var responseModel = new ResponseModel(data: communnes);
 
-            return Ok(new JsonResult(responseModel));
+            return Ok(responseModel);
         }
 
         [HttpGet("address/get-cities")]
@@ -55,7 +55,7 @@ namespace AirPurity.API.Controllers
 
             var responseModel = new ResponseModel(data: cities);
 
-            return Ok(new JsonResult(responseModel));
+            return Ok(responseModel);
         }
     }
 }

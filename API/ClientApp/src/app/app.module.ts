@@ -19,6 +19,7 @@ import { PmMeasuresChartComponent } from './modules/chart/pm-measures-chart/pm-m
 import { HomeComponent } from './components/home/home.component';
 import { StationComponent } from './components/station/station.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { CustomDropdownComponent } from './modules/forms/custom-dropdown/custom-dropdown.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
     CityComponent,
     PmMeasuresChartComponent,
     HomeComponent,
-    StationComponent
+    StationComponent,
+    CustomDropdownComponent
   ],
   imports: [
     BrowserModule,
