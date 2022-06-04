@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, takeUntil } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DictionaryModel } from '../models/dictionaryModel';
 import { ResponseModel } from '../models/responseModel';
@@ -17,7 +17,6 @@ export class DictionaryService {
   getProvinces(){
     return this.http.get(this.apiUrl + 'dictionary/address/get-provinces').pipe(
       map((response : ResponseModel) => {
-        console.log(response);
           if(response.success){
             return <DictionaryModel[]>response.data
           }
@@ -46,7 +45,7 @@ export class DictionaryService {
   }
 
   getCommunes(districtId: number){
-    return this.http.get(this.apiUrl + 'dictionary/address/get-communes', {params: {districtsId : districtId.toString()}}).pipe(
+    return this.http.get(this.apiUrl + 'dictionary/address/get-communes', {params: {districtId : districtId.toString()}}).pipe(
       map((response : ResponseModel) => {
           if(response.success){
             return <DictionaryModel[]>response.data

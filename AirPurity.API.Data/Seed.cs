@@ -43,7 +43,7 @@ namespace AirPurity.API.Data
                         {
                             Id = districts.IndexOf(districtDTO)+1,
                             DistrictName = districtDTO.DistrictName.ToUpper(),
-                            ProvienceId = province.Id,
+                            ProvinceId = province.Id,
                             Communes = new List<Commune>()
                         };
                         foreach (var communeDTO in communes.Where(x => x.DistrictName.ToUpper() == district.DistrictName &&

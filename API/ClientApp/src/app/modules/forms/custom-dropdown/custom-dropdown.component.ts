@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Self } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, Self, SimpleChanges } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { DictionaryModel } from 'src/app/models/dictionaryModel';
@@ -8,7 +8,7 @@ import { DictionaryModel } from 'src/app/models/dictionaryModel';
   templateUrl: './custom-dropdown.component.html',
   styleUrls: ['./custom-dropdown.component.scss']
 })
-export class CustomDropdownComponent implements ControlValueAccessor,OnInit {
+export class CustomDropdownComponent implements ControlValueAccessor, OnInit {
 
   @Input() label: string;
   @Input() placeholder: string;
@@ -16,19 +16,40 @@ export class CustomDropdownComponent implements ControlValueAccessor,OnInit {
   @Input() hideLabel = false;
   @Input() inputClass = '';
   @Input() isActive : boolean = true;
-  @Input() data : BehaviorSubject<DictionaryModel[]>;
+  @Input() data = new BehaviorSubject<DictionaryModel[]>([])
   @Input() disable = null;
-  @Input() isReadOnly : boolean = false;
+  @Input() isReadOnly : boolean = true;
+  @Input() isFilterable : boolean = false;
   tempData : {value: any, name: string}[];
   isExpanded : boolean = false;
   filteredData : {value: any, name: string, selected : boolean}[];
   selectedItem : {value: any, name: string};
-  control : AbstractControl;
+  control : AbstractControl = new FormControl();
   constructor(@Self() public ngControl: NgControl) {
     this.ngControl.valueAccessor = this;
-    this.control = new FormControl();
+    
    }
-   
+  ngOnInit(): void {
+    this.data.subscribe(data => {
+      this.filteredData = [];
+      this.tempData = data;
+      if(data?.length > 0){
+        this.filterData();
+      }
+      this.selectedItem = null;
+    })
+
+    this.onNgControlValueChange(this.ngControl.control.value);
+    this.ngControl.control.valueChanges.subscribe(value => {
+      this.onNgControlValueChange(value);
+    })
+    this.control.valueChanges.subscribe(value => {
+      if(this.tempData?.length > 0 && this.isFilterable){
+        this.filterData();
+      }
+    })
+    
+  }
   writeValue(obj: any): void {
   }
   registerOnChange(fn: any): void {
@@ -36,16 +57,6 @@ export class CustomDropdownComponent implements ControlValueAccessor,OnInit {
   registerOnTouched(fn: any): void {
   }
   setDisabledState?(isDisabled: boolean): void {
-  }
-
-  ngOnInit(): void {
-    this.data.subscribe(data => {
-      this.filteredData = [];
-      this.tempData = data;
-      if(data.length > 0){
-        this.filterData();
-      }
-    })
   }
 
   show(e: any){
@@ -64,15 +75,15 @@ export class CustomDropdownComponent implements ControlValueAccessor,OnInit {
     this.filteredData.forEach(filteredItem => {
       filteredItem.selected = filteredItem == this.selectedItem;
     })
-    this.ngControl.control.setValue(this.selectedItem.value);
     this.control.setValue(this.selectedItem.name);
+    this.ngControl.control.setValue(this.selectedItem.value);
   }
 
   filterData(){
     this.filteredData = [];
     let key = this.control.value;
-    if(key?.length > 0){
-      this.tempData.filter(item => item.name.includes(key))
+    if(key?.length > 0 && this.isFilterable){
+      this.tempData.filter(item => item.name.toLocaleLowerCase().includes(key.toLocaleLowerCase()))
       .forEach(item => {
         this.filteredData.push({
           value: item.value,
@@ -98,8 +109,9 @@ export class CustomDropdownComponent implements ControlValueAccessor,OnInit {
       this.control.setValue(item.name);
       this.selectedItem = item;
     }
-    else if(this.control.value != value){
-      this.control.setValue(value);
+    else if(value == null){
+      this.control.reset(null);
+      this.selectedItem = null;
     }
   }
 

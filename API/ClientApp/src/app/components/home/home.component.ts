@@ -1,16 +1,20 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {  FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { DictionaryModel } from 'src/app/models/dictionaryModel';
 import { CityDTO } from 'src/app/models/formDTOs/cityDTO';
 import { CommuneDTO } from 'src/app/models/formDTOs/communeDTO';
 import { DistrictDTO } from 'src/app/models/formDTOs/districtDTO';
 import { ProvinceDTO } from 'src/app/models/formDTOs/provinceDTO';
 import { CityQuery } from 'src/app/models/QueryParams/city-query';
+import { ResponseModel } from 'src/app/models/responseModel';
 import { BusyService } from 'src/app/services/busy.service';
 import { CityService } from 'src/app/services/city.service';
 import { DictionaryService } from 'src/app/services/dictionary.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -36,101 +40,80 @@ export class HomeComponent implements OnInit {
     communeName:null
   }
 
+  apiUrl = environment.apiUrl;
 
-  constructor(private fb: FormBuilder, private cityService: CityService, private router: Router, public busyService: BusyService, private dictionaryService : DictionaryService) { 
+  constructor(private fb: FormBuilder, private http : HttpClient, private router: Router, public busyService: BusyService, private dictionaryService : DictionaryService) { 
     this.cityForm = this.fb.group({
       province: new FormControl(),
-      district: new FormControl(),
-      commune: new FormControl(),
-      city : new FormControl()
+      district: new FormControl({disabled: true}),
+      commune: new FormControl({disabled: true}),
+      city : new FormControl({disabled: true})
     })
     this.dictionaryService.getProvinces().subscribe(dict => {
-      this.provincesDictionary.next(dict)
-    })
+        this.provincesDictionary.next(dict);
+    });
   }
 
   ngOnInit(): void {
-    this.cityService.citiesForm$.subscribe(provinces => {
-      // this.provinces = provinces;
-      // if(provinces.length>0){
-      //   provinces.forEach(p => {
-      //     if(p.provinceName === this.cityQuery.provinceName){
-      //       this.districts = p.districts;
-      //       p.districts.forEach(d => {
-      //         if(d.districtName === this.cityQuery.districtName){
-      //           this.communes = d.communes;
-      //           d.communes.forEach(c => {
-      //             if(c.communeName === this.cityQuery.communeName )
-      //             {
-      //               this.cities = c.cities;
-      //             }
-      //           })
-      //         }
-      //       })
-      //     }
-      //   })
-        
-      // }
-      
-    });
-    // this.cityForm.get('provinceControl').valueChanges.subscribe(x => x != null ? this.provinceSelected(x): null);
-    // this.cityForm.get('districtControl').valueChanges.subscribe(x => x != null ? this.districtSelected(x): null);
-    // this.cityForm.get('communeControl').valueChanges.subscribe(x => x != null ? this.communeSelected(x): null);
+    this.cityForm.get('province').valueChanges.subscribe(x => this.isProvinceValid() ? this.provinceSelected(x): null);
+    this.cityForm.get('district').valueChanges.subscribe(x => this.isDistrictValid() ? this.districtSelected(x): null);
+    this.cityForm.get('commune').valueChanges.subscribe(x => this.isCommuneValid() ? this.communeSelected(x): null);
   }
 
-  provinceSelected(event: any){
-    // this.cityQuery.provinceName = event;
-    // this.cityService.getCities(this.cityQuery);
-
-    // this.cityForm.controls.districtControl.setValue(null);
-    // this.cityForm.controls.communeControl.setValue(null);
-    // this.cityForm.controls.cityControl.setValue(null);
-    // if(event != null){
-    //   this.cityForm.controls.districtControl.enable();
-    // }
-    // else{
-    //   this.cityForm.controls.districtControl.disable();
-    // }
-    // this.cityForm.controls.communeControl.disable();
-    // this.cityForm.controls.cityControl.disable();
-    
+  provinceSelected(value: any){
+    this.dictionaryService.getDistricts(value).subscribe(dict => {
+      this.districtsDictionary.next(dict);
+    })
+    this.cityForm.controls["district"].setValue(null);
+    this.cityForm.controls["commune"].setValue(null);
+    this.cityForm.controls["city"].setValue(null);
+    this.communesDictionary.next([]);
+    this.citiesDictionary.next([]);
   }
 
-  districtSelected(event: any){
-    // this.cityQuery.districtName = event;
-    // this.cityService.getCities(this.cityQuery);
-
-    // this.cityForm.controls.communeControl.setValue(null);
-    // this.cityForm.controls.cityControl.setValue(null);
-    // if(event != null){
-    //   this.cityForm.controls.communeControl.enable();
-    // }
-    // else{
-    //   this.cityForm.controls.communeControl.disable();
-    // }
-    // this.cityForm.controls.cityControl.disable();
-    
+  districtSelected(value: any){
+    this.dictionaryService.getCommunes(value).subscribe(dict => {
+      this.communesDictionary.next(dict);
+    })
+    this.cityForm.controls["commune"].setValue(null);
+    this.cityForm.controls["city"].setValue(null);
+    this.citiesDictionary.next([]);
   }
 
-  communeSelected(event: any){
-    // this.cityQuery.communeName = event;
-    // this.cityService.getCities(this.cityQuery);
-    
-    // this.cityForm.controls.cityControl.setValue(null);
-    // if(event != null){
-    //   this.cityForm.controls.cityControl.enable();
-    // }
-    // else{
-    //   this.cityForm.controls.cityControl.disable();
-    // }
+  communeSelected(value: any){
+    this.dictionaryService.getCities(value).subscribe(dict => {
+      this.citiesDictionary.next(dict);
+    })
   }
-
 
   citySelected(){
-    this.router.navigateByUrl("/city/"+this.cityForm.controls.cityControl.value)
+    let current = this.cityForm.controls["city"].value;
+    let index = this.citiesDictionary.value.findIndex(x => x.value == current)
+    if(index > -1){
+      let cityName = this.citiesDictionary.value[index].name;
+      this.router.navigateByUrl("/city/"+cityName);
+    }
   }
 
+  isProvinceValid(){
+    let current = this.cityForm.controls["province"].value;
+    return this.provincesDictionary.value.findIndex(x => x.value == current) > -1
+  }
 
+  isDistrictValid(){
+    let current = this.cityForm.controls["district"].value;
+    return this.districtsDictionary.value.findIndex(x => x.value == current) > -1 
+  }
+
+  isCommuneValid(){
+    let current = this.cityForm.controls["commune"].value;
+    return this.communesDictionary.value.findIndex(x => x.value == current) > -1 
+  }
+
+  isCityValid(){
+    let current = this.cityForm.controls["city"].value;
+    return this.citiesDictionary.value.findIndex(x => x.value == current) > -1 
+  }
 
 
 

@@ -47,7 +47,7 @@ namespace AirPurity.API.Services
 
         public IEnumerable<DictionaryModel> GetDistrictsByProvince(int provinceId)
         {
-            var entities = _districtRepository.FindAll(x => x.ProvienceId == provinceId)
+            var entities = _districtRepository.FindAll(x => x.ProvinceId == provinceId)
                 .Select(x => new DictionaryModel(x.Id, x.DistrictName));
             return entities;
         }

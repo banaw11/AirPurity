@@ -26,7 +26,7 @@ namespace AirPurity.API.Controllers
         }
 
         [HttpGet("address/get-districts")]
-        [ResponseCache(Duration = 1800)]
+        [ResponseCache(Duration = 1800, VaryByQueryKeys = new string[] { "provinceId"})]
         public IActionResult GetDistricts(int provinceId)
         {
             var districts = _dictionaryService.GetDistrictsByProvince(provinceId);
@@ -37,7 +37,7 @@ namespace AirPurity.API.Controllers
         }
 
         [HttpGet("address/get-communes")]
-        [ResponseCache(Duration = 1800)]
+        [ResponseCache(Duration = 1800, VaryByQueryKeys = new string[] { "districtId" })]
         public IActionResult GetComunes(int districtId)
         {
             var communnes = _dictionaryService.GetCommunesByDisctrict(districtId);
@@ -48,7 +48,7 @@ namespace AirPurity.API.Controllers
         }
 
         [HttpGet("address/get-cities")]
-        [ResponseCache(Duration = 1800)]
+        [ResponseCache(Duration = 1800, VaryByQueryKeys = new string[] { "communeId" })]
         public IActionResult GetCities(int communeId)
         {
             var cities = _dictionaryService.GetCitiesByCommune(communeId);

@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BusyService } from 'src/app/services/busy.service';
 import { CityService } from 'src/app/services/city.service';
-import { OnlineClientService } from 'src/app/services/online-client.service';
-import { SensorService } from 'src/app/services/sensor.service';
 import { StationService } from 'src/app/services/station.service';
 
 
