@@ -13,23 +13,5 @@ namespace AirPurity.API.BusinessLogic.Repositories.Repositories
         {
             _context = context;
         }
-
-        public override ICollection<Province> GetAll()
-        {
-            return _context.Provinces
-                .Include(p => p.Districts)
-                .ThenInclude(d => d.Communes)
-                .ThenInclude(c => c.Cities)
-                .ToList();
-        }
-
-        public override ICollection<Province> FindAll(Expression<Func<Province, bool>> expression)
-        {
-            return _context.Provinces.Where(expression)
-                .Include(p => p.Districts)
-                .ThenInclude(d => d.Communes)
-                .ThenInclude(c => c.Cities)
-                .ToList();
-        }
     }
 }

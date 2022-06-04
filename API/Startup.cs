@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using API.SignalR;
 using FluentValidation.AspNetCore;
 using API.Middleware;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace API
 {
@@ -26,11 +27,16 @@ namespace API
         {
             services.AddApplicationServices(_config);
             services.AddControllers().AddFluentValidation();
-            services.AddCors();
+           // services.AddCors();
             services.AddSignalR();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+            });
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
             });
         }
 
@@ -47,17 +53,31 @@ namespace API
 
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
+            //app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<OnlineClientHub>("hubs/online");
-                endpoints.MapFallbackToController("index","Fallback");
+               // endpoints.MapFallbackToController("index","Fallback");
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
             });
         }
     }

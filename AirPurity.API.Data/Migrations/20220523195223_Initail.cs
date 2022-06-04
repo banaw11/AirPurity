@@ -4,7 +4,7 @@
 
 namespace AirPurity.API.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Initail : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,8 +42,7 @@ namespace AirPurity.API.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DistrictName = table.Column<string>(type: "TEXT", nullable: true),
-                    ProvienceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProvinceId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ProvinceId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,7 +51,8 @@ namespace AirPurity.API.Data.Migrations
                         name: "FK_Districts_Provinces_ProvinceId",
                         column: x => x.ProvinceId,
                         principalTable: "Provinces",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

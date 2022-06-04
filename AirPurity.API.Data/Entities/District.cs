@@ -8,7 +8,7 @@ namespace AirPurity.API.Data.Entities
         }
 
         public string DistrictName { get; set; }
-        public int ProvienceId { get; set; }
+        public int ProvinceId { get; set; }
         public virtual Province Province {get; set;}
         public virtual ICollection<Commune> Communes { get; set; }
     }
