@@ -41,6 +41,7 @@ namespace API.Extensions
             services.AddScoped<IDictionaryService, DictionaryService>();
             services.AddScoped<IStationService, StationService>();
             services.AddScoped<ISensorService, SensorService>();
+            services.AddScoped<ICityService, CityService>();
             services.AddScoped<IHubService, HubService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);

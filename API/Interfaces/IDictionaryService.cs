@@ -10,5 +10,6 @@ namespace AirPurity.API.Interfaces
         IEnumerable<DictionaryModel> GetDistrictsByProvince(int provinceId);
         IEnumerable<DictionaryModel> GetCommunesByDisctrict(int districtId);
         IEnumerable<DictionaryModel> GetCitiesByCommune(int communeId);
+        IEnumerable<DictionaryModel> GetStationsByCityName(string cityName);
     }
 }

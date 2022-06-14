@@ -1,6 +1,6 @@
 ﻿using AirPurity.API.BusinessLogic.External.Models;
 using AirPurity.API.BusinessLogic.External.Services;
-using AirPurity.API.BusinessLogic.Repositories;
+using AirPurity.API.BusinessLogic.Repositories.Repositories;
 using AirPurity.API.Common.Exceptions;
 using AirPurity.API.Interfaces;
 using API.DTOs.ClientDTOs;

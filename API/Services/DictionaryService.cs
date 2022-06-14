@@ -12,16 +12,19 @@ namespace AirPurity.API.Services
         private readonly DistrictRepository _districtRepository;
         private readonly CommuneRepository _communeRepository;
         private readonly CityRepository _cityRepository;
+        private readonly StationRepository _stationRepository;
 
         public DictionaryService(ProvinceRepository provinceRepository,
             DistrictRepository districtRepository,
             CommuneRepository communeRepository,
-            CityRepository cityRepository)
+            CityRepository cityRepository,
+            StationRepository stationRepository)
         {
             _provinceRepository = provinceRepository;
             _districtRepository = districtRepository;
             _communeRepository = communeRepository;
             _cityRepository = cityRepository;
+            _stationRepository = stationRepository;
         }
 
         public IEnumerable<DictionaryModel> GetAllProvinces()
@@ -50,6 +53,11 @@ namespace AirPurity.API.Services
             var entities = _districtRepository.FindAll(x => x.ProvinceId == provinceId)
                 .Select(x => new DictionaryModel(x.Id, x.DistrictName));
             return entities;
+        }
+
+        public IEnumerable<DictionaryModel> GetStationsByCityName(string cityName)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

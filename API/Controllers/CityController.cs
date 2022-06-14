@@ -1,35 +1,25 @@
-﻿using API.DTOs.Pagination;
+﻿using AirPurity.API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace API.Controllers
 {
     public class CityController : BaseApiController
     {
-        public CityController()
-        {
-        }
+        private readonly ICityService _cityService;
 
-        [HttpGet("All")]
-        [ResponseCache(Duration = 1800, VaryByQueryKeys = new []{"provinceName","districtName","communeName"})]
-        public IActionResult GetCitiesAsync([FromQuery] CityQuery query)
+        public CityController(ICityService cityService)
         {
-            //var proviences = await _unitOfWork.CityRepository.GetCitiesAsync(query);
-            
-            //return Ok(proviences);
-
-            throw new NotImplementedException();
+            _cityService = cityService;
         }
 
         [HttpGet]
-        [ResponseCache(Duration = 300, VaryByQueryKeys = new []{"cityName"})]
+        [ResponseCache(Duration = 3600, VaryByQueryKeys = new []{"cityName"})]
         public IActionResult GetCityAsync([FromQuery] string cityName)
         {
-            //var city = await _unitOfWork.CityRepository.GetCityByNameAsync(cityName);
+            var city = _cityService.GetCityByName(cityName);
 
-            //return city;
+            return Ok(city);
 
-            throw new NotImplementedException();
         }
     }
 }
