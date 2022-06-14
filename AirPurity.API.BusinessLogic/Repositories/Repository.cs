@@ -37,7 +37,7 @@ namespace AirPurity.API.BusinessLogic.Repositories
             return _context.Set<T>().Where(expression).ToList();
         }
 
-        public ICollection<T> FindAll(Expression<Func<T, bool>> expression, params Expression<Func<T, bool>>[] includes)
+        public ICollection<T> FindAll(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
             return includes.Aggregate(
                 _context.Set<T>().Where(expression),
