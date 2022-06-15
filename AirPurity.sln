@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirPurity.API.Repositories"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirPurity.API.Common", "AirPurity.API.Common\AirPurity.API.Common.csproj", "{E80B945A-D711-4A82-BE41-4F7281256467}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirPurity.API.External", "AirPurity.API.External\AirPurity.API.External.csproj", "{426EE069-1138-4882-8450-F57887C37AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirPurity.API.External", "AirPurity.API.External\AirPurity.API.External.csproj", "{426EE069-1138-4882-8450-F57887C37AA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

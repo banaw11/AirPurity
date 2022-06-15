@@ -1,5 +1,6 @@
 ﻿using AirPurity.API.BusinessLogic.External.Models;
 using AirPurity.API.Data.Entities;
+using AirPurity.API.DTOs.ClientDTOs;
 using API.DTOs.ClientDTOs;
 using AutoMapper;
 
@@ -34,6 +35,10 @@ namespace API.Helpers
             CreateMap<District, DistrictFormDTO>();
             CreateMap<Commune, CommuneFormDTO>();
             CreateMap<City, CityFormDTO>();
+            CreateMap<Notification, NotificationDTO>()
+                .ReverseMap();
+            CreateMap<NotificationSubject, NotificationSubjectDTO>()
+                .ReverseMap();
                 
         }
     }

@@ -73,6 +73,11 @@ namespace AirPurity.API.BusinessLogic.Repositories
                 .FirstOrDefault(x => x.Id == id);
         }
 
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
         public void Update(T entity)
         {
             if(entity != null)

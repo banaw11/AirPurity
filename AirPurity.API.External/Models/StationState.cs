@@ -24,6 +24,11 @@ namespace AirPurity.API.BusinessLogic.External.Models
         }
         public DateTime CalcDate { get; set; }
         public IndexLevel StIndexLevel { get; set; }
+        public IndexLevel So2IndexLevel { get; set; }
+        public IndexLevel No2IndexLevel { get; set; }
+        public IndexLevel Pm10IndexLevel { get; set; }
+        public IndexLevel Pm25IndexLevel { get; set; }
+        public IndexLevel O3IndexLevel { get; set; }
 
     }
 }

@@ -4,7 +4,11 @@ using AirPurity.API.BusinessLogic.Repositories;
 using AirPurity.API.BusinessLogic.Repositories.Interfaces;
 using AirPurity.API.BusinessLogic.Repositories.Repositories;
 using AirPurity.API.Data;
+using AirPurity.API.DTOs.ClientDTOs;
+using AirPurity.API.DTOs.Validators;
 using AirPurity.API.Interfaces;
+using AirPurity.API.QuartzCore;
+using AirPurity.API.Repositories.BusinessLogic.Repositories;
 using AirPurity.API.Services;
 using API.DTOs.Pagination;
 using API.DTOs.Validators;
@@ -36,12 +40,14 @@ namespace API.Extensions
             services.AddScoped<NormRepository>();
             services.AddScoped<ProvinceRepository>();
             services.AddScoped<StationRepository>();
+            services.AddScoped<NotificationRepository>();
             services.AddScoped<GiosHttpClientContext>();
             services.AddScoped<GiosHttpClientService>();
             services.AddScoped<IDictionaryService, DictionaryService>();
             services.AddScoped<IStationService, StationService>();
             services.AddScoped<ISensorService, SensorService>();
             services.AddScoped<ICityService, CityService>();
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IHubService, HubService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
@@ -86,6 +92,7 @@ namespace API.Extensions
             });
             services.AddScoped<IValidator<CityQuery>, CityQueryValidator>();
             services.AddScoped<IValidator<SensorsDataQuery>, SensorsDataQueryValidator>();
+            services.AddScoped<IValidator<NotificationDTO>, NotificationDTOValidator>();
             services.AddHttpClient("gios", x =>
             {
                 x.BaseAddress = new Uri("http://api.gios.gov.pl/pjp-api/rest/");
@@ -98,7 +105,15 @@ namespace API.Extensions
             services.AddSingleton(new Job(
                 type: typeof(RemidersJob),
                 expression: "0 5,15,30,45 * ? * *")); //every hour at minutes 5,15,30 and 45 
-            
+            services.AddSingleton<NotificationJob>();
+            services.AddSingleton(new Job(
+                type: typeof(NotificationJob),
+                expression: "0 0/2 * * * ? *")); //every hour every 5 minutes
+            services.AddSingleton<ResetNotificationJob>();
+            services.AddSingleton(new Job(
+                type: typeof(ResetNotificationJob),
+                expression: "0 0 6 * * ? *")); //at 6 am every day
+
 
             return services;
         }
