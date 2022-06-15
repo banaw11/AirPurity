@@ -13,6 +13,7 @@ namespace AirPurity.API.BusinessLogic.Repositories.Interfaces
         void DeleteById(int id);
         void Add(T entity);
         void Update(T entity);
+        void SaveChanges();
 
     }
 }
