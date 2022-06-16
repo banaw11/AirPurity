@@ -12,6 +12,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>GiosHttpRequest.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\NotificationResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NotificationResource.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +25,11 @@
       <LastGenOutput>GiosHttpRequest.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CustomToolNamespace>AirPurity</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\NotificationResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotificationResource.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

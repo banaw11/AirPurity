@@ -2,10 +2,12 @@
 using AirPurity.API.BusinessLogic.External.Services;
 using AirPurity.API.BusinessLogic.Repositories.Repositories;
 using AirPurity.API.Common.Enums;
+using AirPurity.API.Common.Resources;
 using AirPurity.API.Data.Entities;
 using AirPurity.API.DTOs.ClientDTOs;
 using AirPurity.API.Interfaces;
 using AirPurity.API.Repositories.BusinessLogic.Repositories;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +20,17 @@ namespace AirPurity.API.Services
         private readonly NotificationRepository _notificationRepository;
         private readonly GiosHttpClientService _giosHttpClientService;
         private readonly StationRepository _stationRepository;
+        private readonly EmailService _emailService;
+        private IConfigurationSection _hostConfig;
 
         public NotificationService(NotificationRepository notificationRepository, GiosHttpClientService giosHttpClientService,
-            StationRepository stationRepository)
+            StationRepository stationRepository, IConfiguration configuration, EmailService emailService)
         {
             _notificationRepository = notificationRepository;
             _giosHttpClientService = giosHttpClientService;
             _stationRepository = stationRepository;
+            _emailService = emailService;
+            _hostConfig = configuration.GetRequiredSection("HostConfig");
         }
 
         public void Add(Notification notification)
@@ -102,7 +108,6 @@ namespace AirPurity.API.Services
 
                 return task;
             }
-
             return Task.CompletedTask;
         }
 
@@ -127,6 +132,7 @@ namespace AirPurity.API.Services
         {
             if(notificationDictionary != null)
             {
+                string homeUrl = GetHomeUrl();
                 List<EmailTemplateModel> emails = new List<EmailTemplateModel>();
 
                 foreach(var valuePair in notificationDictionary)
@@ -149,14 +155,17 @@ namespace AirPurity.API.Services
 
                     if (emailTemplateModel.Notifications.Any())
                     {
+                        emailTemplateModel.Subject = NotificationResource.EmailSubject;
                         emailTemplateModel.Email = userEmail;
+                        emailTemplateModel.HomeUrl = homeUrl;
+                        emailTemplateModel.StopSubscriptionUrl = GetStopNotificationUrl(userEmail);
                         emails.Add(emailTemplateModel);
                     }
                 }
 
                 if (emails.Any())
                 {
-                    // to do send emails
+                    Task.Run(() => _emailService.SendEmails(emails));
                 }
             }
         }
@@ -270,6 +279,38 @@ namespace AirPurity.API.Services
 
             return null;
             
+        }
+
+        private string GetHomeUrl()
+        {
+            string scheme = _hostConfig.GetValue<string>("Scheme");
+            string host = _hostConfig.GetValue<string>("host");
+            int? port = _hostConfig.GetValue<int?>("port");
+            
+            var uri = new UriBuilder(scheme, host);
+            if (port.HasValue)
+            {
+                uri.Port = (int)port;
+            }
+            return uri.ToString();
+        }
+
+        private string GetStopNotificationUrl(string userEmail)
+        {
+            string scheme = _hostConfig.GetValue<string>("Scheme");
+            string host = _hostConfig.GetValue<string>("host");
+            int? port = _hostConfig.GetValue<int?>("port");
+
+            var uri = new UriBuilder(scheme, host);
+            if (port.HasValue)
+            {
+                uri.Port = (int)port;
+            }
+
+            uri.Path = "stop-notification";
+            uri.Query = $"email={userEmail}";
+
+            return uri.ToString();
         }
     }
 }
