@@ -32,6 +32,7 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
+            services.AddHttpContextAccessor();
             services.AddSingleton<OnlineTracker>();
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<CityRepository>();
@@ -48,6 +49,7 @@ namespace API.Extensions
             services.AddScoped<ISensorService, SensorService>();
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<EmailService>();
             services.AddScoped<IHubService, HubService>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
@@ -108,7 +110,7 @@ namespace API.Extensions
             services.AddSingleton<NotificationJob>();
             services.AddSingleton(new Job(
                 type: typeof(NotificationJob),
-                expression: "0 0/2 * * * ? *")); //every hour every 5 minutes
+                expression: "0 0/5 * * * ? *")); //every hour every 5 minutes
             services.AddSingleton<ResetNotificationJob>();
             services.AddSingleton(new Job(
                 type: typeof(ResetNotificationJob),

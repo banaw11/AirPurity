@@ -30,9 +30,6 @@ namespace AirPurity.API.Controllers
         public IActionResult DeleteNoticiation([FromQuery] string email)
         {
             _notificationService.RemoveAllNotification(email);
-            //to - do redirect to inform page
-
-            HttpContext.Response.Redirect(string.Empty);
             return Ok();
         }
     }
