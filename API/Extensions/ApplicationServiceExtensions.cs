@@ -25,7 +25,6 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using System;
-using System.Net.Http;
 
 namespace API.Extensions
 {
@@ -59,20 +58,21 @@ namespace API.Extensions
             {
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-                string connStr;
-
                 // Depending on if in development or production, use either Heroku-provided
                 // connection string, or development connection string from env var.
                 if (env == "Development")
                 {
                     // Use connection string from file.
                      //connStr = config.GetConnectionString("DefaultConnection");
-                    connStr = config.GetConnectionString("SqLiteConnection");
+                    var connStr = config.GetConnectionString("SqLiteConnection");
+                    options.UseSqlite(connStr)
+                        .EnableSensitiveDataLogging();
                 }
                 else
                 {
                     // Use connection string provided at runtime by Heroku.
                     var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                   
 
                     // Parse connection URL to connection string for Npgsql
                     connUrl = connUrl.Replace("postgres://", string.Empty);
@@ -85,13 +85,14 @@ namespace API.Extensions
                     var pgHost = pgHostPort.Split(":")[0];
                     var pgPort = pgHostPort.Split(":")[1];
 
-                    connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;TrustServerCertificate=True";
+                    var connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;TrustServerCertificate=True";
+                    options.UseNpgsql(connStr);
                 }
 
                 // Whether the connection string came from the local development configuration file
                 // or from the environment variable from Heroku, use it to set up your DbContext.
-                 //options.UseNpgsql(connStr);
-                options.UseSqlite(connStr).EnableSensitiveDataLogging();
+
+
 
             });
             services.AddScoped<IValidator<CityQuery>, CityQueryValidator>();

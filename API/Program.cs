@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AirPurity.API.BusinessLogic.External.Services;
 using AirPurity.API.Data;
 using AutoMapper;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +23,7 @@ namespace API
                 var context = services.GetRequiredService<DataContext>();
                 var clientContext = services.GetRequiredService<GiosHttpClientService>();
                 var mapper = services.GetRequiredService<IMapper>();
-                await context.Database.EnsureCreatedAsync();
+                await context.Database.MigrateAsync();
                 await Seed.SeedStations(clientContext, context, mapper);
             }
             catch(Exception ex)
