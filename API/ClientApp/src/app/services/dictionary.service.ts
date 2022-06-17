@@ -74,4 +74,19 @@ export class DictionaryService {
     )
   }
 
+  getIndexLevels(){
+    return this.http.get(this.apiUrl + 'dictionary/index-levels').pipe(
+      map((response : ResponseModel) => {
+          if(response.success){
+            return <DictionaryModel[]>response.data
+          }
+          else{
+            //handling errors
+            return [];
+          }
+      })
+      ,catchError(err => throwError(err))
+    )
+  }
+
 }

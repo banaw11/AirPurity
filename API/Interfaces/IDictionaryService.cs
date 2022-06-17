@@ -1,5 +1,4 @@
 ﻿using AirPurity.API.DTOs;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace AirPurity.API.Interfaces
@@ -10,6 +9,6 @@ namespace AirPurity.API.Interfaces
         IEnumerable<DictionaryModel> GetDistrictsByProvince(int provinceId);
         IEnumerable<DictionaryModel> GetCommunesByDisctrict(int districtId);
         IEnumerable<DictionaryModel> GetCitiesByCommune(int communeId);
-        IEnumerable<DictionaryModel> GetStationsByCityName(string cityName);
+        IEnumerable<DictionaryModel> GetIndexLevels();
     }
 }

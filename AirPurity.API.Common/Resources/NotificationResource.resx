@@ -117,13 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Bad" xml:space="preserve">
+    <value>Zły</value>
+  </data>
   <data name="EmailSubject" xml:space="preserve">
     <value>Air Purity App : alert</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobry</value>
   </data>
   <data name="ParamState" xml:space="preserve">
     <value>&lt;li&gt;stan dla {0} : {1}&lt;/li&gt;</value>
   </data>
   <data name="StationState" xml:space="preserve">
     <value>&lt;li&gt;Stan ogólny jakości powietrza : {0}&lt;/li&gt;</value>
+  </data>
+  <data name="Sufficient" xml:space="preserve">
+    <value>Dostateczny</value>
+  </data>
+  <data name="Temperate" xml:space="preserve">
+    <value>Umiarkowany</value>
+  </data>
+  <data name="VeryBad" xml:space="preserve">
+    <value>Bardzo zły</value>
+  </data>
+  <data name="VeryGood" xml:space="preserve">
+    <value>Bardzo dobry</value>
   </data>
 </root>

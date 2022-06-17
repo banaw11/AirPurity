@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { CityService } from './services/city.service';
 
 @Component({
@@ -8,6 +8,9 @@ import { CityService } from './services/city.service';
 })
 export class AppComponent {
   title = 'AirPurity';
+  @ViewChild('wraper', { read: ViewContainerRef })
+  wraper!: ViewContainerRef;
+
   constructor(){
   }
 }

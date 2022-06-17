@@ -1,6 +1,9 @@
 ﻿using AirPurity.API.BusinessLogic.Repositories.Repositories;
+using AirPurity.API.Common.Enums;
+using AirPurity.API.Common.Extensions;
 using AirPurity.API.DTOs;
 using AirPurity.API.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -55,9 +58,16 @@ namespace AirPurity.API.Services
             return entities;
         }
 
-        public IEnumerable<DictionaryModel> GetStationsByCityName(string cityName)
+        public IEnumerable<DictionaryModel> GetIndexLevels()
         {
-            throw new System.NotImplementedException();
+            List<DictionaryModel> dictionaryModels = new List<DictionaryModel>();
+            var levels = Enum.GetValues<IndexLevels>().Cast<IndexLevels>();
+
+            foreach (var level in levels)
+            {
+                dictionaryModels.Add(new DictionaryModel((int)level, level.GetDisplayName()));
+            }
+            return dictionaryModels;
         }
     }
 }

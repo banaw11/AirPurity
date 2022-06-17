@@ -15,7 +15,5 @@ namespace AirPurity.API.DTOs.ClientDTOs
     {
         public string ParamCode { get; set; }
         public int IndexLevelId { get; set; }
-        public int? LastIndexLebelId { get; set; }
-        public int NotificationId { get; set; }
     }
 }

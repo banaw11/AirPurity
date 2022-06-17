@@ -27,7 +27,7 @@ namespace AirPurity.API.Controllers
         }
 
         [HttpPost("delete")]
-        public IActionResult DeleteNoticiation([FromQuery] string email)
+        public IActionResult DeleteNoticiation(string email)
         {
             _notificationService.RemoveAllNotification(email);
             return Ok();

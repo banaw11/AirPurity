@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AirPurity.API.BusinessLogic.External.Services;
 using AirPurity.API.Data;
 using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ namespace API
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-           using var scope = host.Services.CreateScope();
+            using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             try
             {
