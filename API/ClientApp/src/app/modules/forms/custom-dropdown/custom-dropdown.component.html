@@ -1,0 +1,27 @@
+<ng-container>
+    
+    <label class="col-form-label" *ngIf="!hideLabel">{{label}}</label>
+    <div class="input-container dropdown">
+        <input type="hidden"
+         [formControl]="ngControl.control"
+        />
+        <input class="form-control {{inputClass}}"
+            [class.active-read-only]="isReadOnly && isActive"
+            [attr.disabled]="disable ? true : null"
+            [attr.readonly]="isReadOnly ? true : null"
+            [placeholder] ="placeholder"
+            (focus)="!disable && show($event)"
+            (focusout)="!disable && hide($event)"
+            [formControl]="control"/>
+        <i *ngIf="!disable" class="dropdown-icon" [class.up]="isExpanded" [class.down]="isExpanded == false" (click)="toogleList()" ></i>
+        <div [class.visible]="isExpanded" class="menu" tabindex="-1">
+            <div class="item" *ngFor="let item of filteredData; let i=index" [class.selected]="item?.selected" [attr.data-value]="item?.value"
+            (mousedown)="onSelect(i)">
+                {{item?.name}}
+            </div>
+            <div class="item no-results" *ngIf="filteredData.length == 0">
+                {{'Brak wyników'}}
+            </div>
+        </div>
+    </div>
+</ng-container>

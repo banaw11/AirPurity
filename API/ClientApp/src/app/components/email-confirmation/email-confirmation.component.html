@@ -1,0 +1,16 @@
+<nb-layout>
+    <nb-layout-header>
+        <div class="header-container">
+            <nb-action>
+                <button nbButton outline status="primary" shape="semi-round" (click)="backToHome()">AirPurity</button>
+            </nb-action>
+        </div> 
+    </nb-layout-header>
+    <nb-layout-column fxLayoutAlign="center start">
+        <nb-card fxFlex.gt-xs="30" class="info-card" *ngIf="(busyService.isBusy$ |async) == false">
+            <div class="label-box">
+                <label>{{responseMsg}}</label>
+            </div>
+        </nb-card>
+    </nb-layout-column>
+</nb-layout>

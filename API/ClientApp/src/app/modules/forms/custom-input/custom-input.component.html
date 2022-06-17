@@ -1,0 +1,32 @@
+<ng-container>
+    
+    <label class="col-form-label" *ngIf="!hideLabel">{{label}}</label>
+    <div class="input-container">
+
+        <input
+            [class.no-background-image]="type === 'password'"
+            [attr.type]="inputType"
+            class="form-control {{inputClass}}"
+            [formControl]="ngControl.control"
+            [attr.disabled]="disable"
+            [attr.readonly]="isReadOnly ? true : null"
+            [placeholder]="placeholder"/>
+        <i *ngIf="removable" class="removable" (click)="remove()"></i>
+        <span *ngIf="type === 'password'" class="toggle-password" role="button" tabindex="0" (click)="changeType()">
+            {{(tooglePassword ? 'Hide' : 'Show')}}
+        </span>
+    </div>
+        
+    
+    <div *ngIf="ngControl.touched && ngControl.control.errors?.required" class="invalid-feedback"
+    [class.d-block]="ngControl.touched && ngControl.invalid">
+        Pole jest wymagane
+    </div>
+    <ng-container *ngIf="ngControl.control.errors != null">
+        <div *ngIf="ngControl.touched && ngControl.control.errors['pattern'] != null" class="invalid-feedback"
+        [class.d-block]="ngControl.touched && ngControl.invalid">
+            Format jest nieprawidłowy
+        </div>
+    </ng-container>
+    
+</ng-container>

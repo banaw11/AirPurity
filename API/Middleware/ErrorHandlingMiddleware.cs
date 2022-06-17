@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using API.Middleware.Exceptions;
+using AirPurity.API.Common.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace API.Middleware

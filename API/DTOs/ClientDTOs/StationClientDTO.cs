@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AirPurity.API.BusinessLogic.External.Models;
+using System.Collections.Generic;
 
 namespace API.DTOs.ClientDTOs
 {
@@ -9,6 +10,6 @@ namespace API.DTOs.ClientDTOs
         public double GegrLat { get; set; }
         public double GegrLon { get; set; }
         public string AddressStreet { get; set; }
-        public ICollection<SensorDTO> Sensors { get; set; }
+        public ICollection<SensorExternal> Sensors { get; set; }
     }
 }

@@ -1,0 +1,75 @@
+.input-container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    margin: 10px 0;
+}
+
+.input-container input{
+    width: 100%;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ccc;
+    color: white
+}
+
+.removable{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    opacity: 0.6;
+    right: 0;
+}
+.removable:before,
+.removable:after{
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 14px;
+    background-color: black;
+}
+
+.removable:hover{
+    opacity: 1;
+}
+
+.removable:before{
+    transform: rotate(45deg);
+}
+
+.removable:after{
+    transform: rotate(-45deg);
+}
+
+.toggle-password{
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2px 6px;
+}
+
+.toggle-password:hover{
+    border-radius: 15px;
+    background-color: rgba(116, 122, 128,0.09);;
+}
+
+.no-background-image{
+    background-image: none !important;
+}
+
+.col-form-label{
+    font-weight: bold;
+}
+
+.invalid-feedback{
+    font-size: 11px;
+    color: rgb(179, 4, 4);
+    font-weight: bold;
+}
