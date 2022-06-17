@@ -9,6 +9,7 @@ using AirPurity.API.DTOs.Validators;
 using AirPurity.API.Interfaces;
 using AirPurity.API.QuartzCore;
 using AirPurity.API.Repositories.BusinessLogic.Repositories;
+using AirPurity.API.Repositories.Repositories;
 using AirPurity.API.Services;
 using API.DTOs.Pagination;
 using API.DTOs.Validators;
@@ -42,6 +43,7 @@ namespace API.Extensions
             services.AddScoped<ProvinceRepository>();
             services.AddScoped<StationRepository>();
             services.AddScoped<NotificationRepository>();
+            services.AddScoped<NotificationUserRepository>();
             services.AddScoped<GiosHttpClientContext>();
             services.AddScoped<GiosHttpClientService>();
             services.AddScoped<IDictionaryService, DictionaryService>();

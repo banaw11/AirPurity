@@ -39,8 +39,33 @@ namespace AirPurity.API.Services
         {
             foreach (var model in emailTemplateModels)
             {
-                string body = CreateBody(model);
-                Task.Run(async () => await SendEmail(model.Subject, body, model.Email));
+                string body = CreateNotifiactionBody(model);
+
+                try
+                {
+                    Task.Run(async () => await SendEmail(model.Subject, body, model.Email));
+                }
+                catch (Exception ex)
+                {
+
+                }
+                
+            }
+        }
+
+        public async Task<bool> SendConfirmationEmail(string email, string callbackUrl)
+        {
+            string body = CreateEmailConfirmationBody(callbackUrl);
+            string subject = NotificationResource.ConfirmationEmailSubject;
+
+            try
+            {
+                await SendEmail(email, body, subject);
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
             }
         }
 
@@ -73,7 +98,7 @@ namespace AirPurity.API.Services
             }
         }
 
-        private string CreateBody(EmailTemplateModel model)
+        private string CreateNotifiactionBody(EmailTemplateModel model)
         {
             var emailTemplatePath = $"{_rootPath}/Templates/Notification_Email_Template.html";
             string emailTemplate = string.Empty;
@@ -126,6 +151,19 @@ namespace AirPurity.API.Services
             string stationRow = string.Format(stationTemplate, model.StationName, listValues);
 
             return stationRow;
+        }
+
+        private string CreateEmailConfirmationBody(string callbackUrl)
+        {
+            var emailTemplatePath = $"{_rootPath}/Templates/Email_Confirmation_Template.html";
+            string emailTemplate = string.Empty;
+
+            using (StreamReader reder = File.OpenText(emailTemplatePath))
+            {
+                emailTemplate = reder.ReadToEnd();
+            }
+
+            return string.Format(emailTemplate, NotificationResource.ConfirmationEmailSubject, callbackUrl);
         }
     }
 }

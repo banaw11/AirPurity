@@ -7,11 +7,13 @@ using AirPurity.API.Data.Entities;
 using AirPurity.API.DTOs.ClientDTOs;
 using AirPurity.API.Interfaces;
 using AirPurity.API.Repositories.BusinessLogic.Repositories;
+using AirPurity.API.Repositories.Repositories;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace AirPurity.API.Services
 {
@@ -21,52 +23,78 @@ namespace AirPurity.API.Services
         private readonly GiosHttpClientService _giosHttpClientService;
         private readonly StationRepository _stationRepository;
         private readonly EmailService _emailService;
+        private readonly NotificationUserRepository _notificationUserRepository;
         private IConfigurationSection _hostConfig;
 
         public NotificationService(NotificationRepository notificationRepository, GiosHttpClientService giosHttpClientService,
-            StationRepository stationRepository, IConfiguration configuration, EmailService emailService)
+            StationRepository stationRepository, IConfiguration configuration, EmailService emailService, NotificationUserRepository notificationUserRepository)
         {
             _notificationRepository = notificationRepository;
             _giosHttpClientService = giosHttpClientService;
             _stationRepository = stationRepository;
             _emailService = emailService;
+            _notificationUserRepository = notificationUserRepository;
             _hostConfig = configuration.GetRequiredSection("HostConfig");
         }
 
-        public void Add(Notification notification)
+        public bool Add(Notification notification, string email)
         {
+            bool isEmailConfirmed = false;
+
             if(notification != null)
             {
-                var existedNotification = _notificationRepository
-                    .FindAll(x => x.UserEmail.ToLower() == notification.UserEmail.ToLower() && x.StationId == notification.StationId).FirstOrDefault();
-
-                if(existedNotification != null)
+                var user = _notificationUserRepository.GetByEmail(email);
+                if(user != null)
                 {
-                    existedNotification.IndexLevelId = notification.IndexLevelId;
-                    foreach (var subject in existedNotification.NotificationSubjects)
+                    isEmailConfirmed = user.IsEmailConfirmed;
+                    var existedNotification = user.Notifications.FirstOrDefault(x => x.StationId == notification.StationId);
+                    if(existedNotification != null)
                     {
-                        _notificationRepository.RemoveNotificationSubject(subject);
+                        existedNotification.IndexLevelId = notification.IndexLevelId;
+                        foreach (var subject in existedNotification.NotificationSubjects)
+                        {
+                            _notificationRepository.RemoveNotificationSubject(subject);
+                        }
+
+                        foreach (var subject in notification.NotificationSubjects)
+                        {
+                            subject.NotificationId = existedNotification.Id;
+                            _notificationRepository.AddNotificationSubject(subject);
+                        }
+                    }
+                    else
+                    {
+                        notification.NotificationUserId = user.Id;
+                        _notificationRepository.Add(notification);
                     }
 
-                    foreach (var subject in notification.NotificationSubjects)
+                    if(user.IsActive == false)
                     {
-                        subject.NotificationId = existedNotification.Id;
-                        _notificationRepository.AddNotificationSubject(subject);
+                        _notificationUserRepository.ActivateUser(user.UserEmail);
                     }
                 }
                 else
                 {
-                    _notificationRepository.Add(notification);
+                    user = new NotificationUser()
+                    {
+                        UserEmail = email,
+                        IsActive = true,
+                        IsEmailConfirmed = true,
+                        Notifications = new List<Notification>() { notification }
+                    };
+                    
+                    _notificationUserRepository.Add(user);
                 }
-
                 _notificationRepository.SaveChanges();
             }
+            return isEmailConfirmed;
         }
 
         public IEnumerable<Notification> GetAll()
         {
             var notifications = _notificationRepository
-                .GetAll(x => x.NotificationSubjects);
+                .GetAll(x => x.NotificationSubjects, x => x.NotificationUser )
+                .Where(x => x.NotificationUser.IsActive && x.NotificationUser.IsEmailConfirmed);
 
             return notifications;
         }
@@ -80,26 +108,30 @@ namespace AirPurity.API.Services
             }
         }
 
-        public void RemoveAllNotification(string userEmail)
+        public void RemoveAllNotification(Guid stopNotificationToken)
         {
-            if (!string.IsNullOrEmpty(userEmail))
+            if (!string.IsNullOrEmpty(stopNotificationToken.ToString()))
             {
-                var notifications = _notificationRepository
-                    .FindAll(x => x.UserEmail.ToLower() == userEmail.ToLower());
-
-                foreach(var notification in notifications)
+                var user = _notificationUserRepository.DeactivateUser(stopNotificationToken);
+                if(user != null)
                 {
-                    _notificationRepository.DeleteById(notification.Id);
-                }
+                    var notifications = _notificationRepository
+                    .FindAll(x => x.NotificationUser.Id == user.Id);
 
-                _notificationRepository.SaveChanges();
+                    foreach (var notification in notifications)
+                    {
+                        _notificationRepository.DeleteById(notification.Id);
+                    }
+
+                    _notificationRepository.SaveChanges();
+                }
             }
         }
 
         public Task StartNotificationThread()
         {
             var notifications = GetAll()
-                .GroupBy(x => x.UserEmail)
+                .GroupBy(x => x.NotificationUser)
                 .ToDictionary(x => x.Key, x => x.ToList());
 
             if (notifications.Any())
@@ -128,7 +160,7 @@ namespace AirPurity.API.Services
             _notificationRepository.SaveChanges();
         }
 
-        private async Task NotificationThread(Dictionary<string, List<Notification>> notificationDictionary)
+        private async Task NotificationThread(Dictionary<NotificationUser, List<Notification>> notificationDictionary)
         {
             if(notificationDictionary != null)
             {
@@ -137,7 +169,7 @@ namespace AirPurity.API.Services
 
                 foreach(var valuePair in notificationDictionary)
                 {
-                    var userEmail = valuePair.Key;
+                    var userEmail = valuePair.Key.UserEmail;
                     EmailTemplateModel emailTemplateModel = new EmailTemplateModel();
                     foreach (var notification in valuePair.Value)
                     {
@@ -158,7 +190,7 @@ namespace AirPurity.API.Services
                         emailTemplateModel.Subject = NotificationResource.EmailSubject;
                         emailTemplateModel.Email = userEmail;
                         emailTemplateModel.HomeUrl = homeUrl;
-                        emailTemplateModel.StopSubscriptionUrl = GetStopNotificationUrl(userEmail);
+                        emailTemplateModel.StopSubscriptionUrl = GetStopNotificationUrl(valuePair.Key.StopNotificationToken.Value);
                         emails.Add(emailTemplateModel);
                     }
                 }
@@ -295,7 +327,7 @@ namespace AirPurity.API.Services
             return uri.ToString();
         }
 
-        private string GetStopNotificationUrl(string userEmail)
+        private string GetStopNotificationUrl(Guid stopNotyficationToken)
         {
             string scheme = _hostConfig.GetValue<string>("Scheme");
             string host = _hostConfig.GetValue<string>("host");
@@ -308,9 +340,45 @@ namespace AirPurity.API.Services
             }
 
             uri.Path = "stop-notification";
-            uri.Query = $"email={userEmail}";
+            uri.Query = $"token={HttpUtility.UrlEncode(stopNotyficationToken.ToString())}";
 
             return uri.ToString();
+        }
+
+        public async Task<bool> SendConfirmationEmailAsync(string email)
+        {
+            var user = _notificationUserRepository.GetByEmail(email);
+            if(user == null)
+            {
+                return false;
+            }
+
+            user.EmailConfirmationToken = Guid.NewGuid();
+
+            _notificationUserRepository.Update(user);
+            _notificationUserRepository.SaveChanges();
+
+            string scheme = _hostConfig.GetValue<string>("Scheme");
+            string host = _hostConfig.GetValue<string>("host");
+            int? port = _hostConfig.GetValue<int?>("port");
+
+            var uri = new UriBuilder(scheme, host);
+            if (port.HasValue)
+            {
+                uri.Port = (int)port;
+            }
+
+            uri.Path = "email-confirmation";
+            uri.Query = $"token={HttpUtility.UrlEncode(user.EmailConfirmationToken.ToString())}";
+
+            return await _emailService.SendConfirmationEmail(user.UserEmail, uri.ToString());
+        }
+
+        public bool ConfirmEmail(Guid token)
+        {
+            
+            return _notificationUserRepository.ConfirmEmail(token);
+
         }
     }
 }

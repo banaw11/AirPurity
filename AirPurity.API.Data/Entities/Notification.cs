@@ -7,7 +7,8 @@
             this.NotificationSubjects = new HashSet<NotificationSubject>();
         }
 
-        public string UserEmail { get; set; }
+        public int NotificationUserId { get; set; }
+        public virtual NotificationUser NotificationUser { get; set; }
         public int CityId { get; set; }
         public virtual City City { get; set; }
         public int StationId { get; set; }
