@@ -22,8 +22,11 @@
     [class.d-block]="ngControl.touched && ngControl.invalid">
         Pole jest wymagane
     </div>
-    <div *ngIf="ngControl.touched && ngControl.control.errors['pattern'] != null" class="invalid-feedback"
-    [class.d-block]="ngControl.touched && ngControl.invalid">
-        Format jest nieprawidłowy
-    </div>
+    <ng-container *ngIf="ngControl.control.errors != null">
+        <div *ngIf="ngControl.touched && ngControl.control.errors['pattern'] != null" class="invalid-feedback"
+        [class.d-block]="ngControl.touched && ngControl.invalid">
+            Format jest nieprawidłowy
+        </div>
+    </ng-container>
+    
 </ng-container>

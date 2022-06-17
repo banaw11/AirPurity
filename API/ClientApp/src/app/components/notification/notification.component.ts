@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { DictionaryModel } from 'src/app/models/dictionaryModel';
+import { Notification } from 'src/app/models/notification';
 import { BusyService } from 'src/app/services/busy.service';
 import { DictionaryService } from 'src/app/services/dictionary.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -17,6 +18,8 @@ export class NotificationComponent implements OnInit {
   indexLevelDictionary = new BehaviorSubject<DictionaryModel[]>([]);
   paramDictionary = new BehaviorSubject<DictionaryModel[]>([]);
   notificationForm: FormGroup;
+  showForm: boolean = true;
+  responseMsg: string = "";
 
   @Output() closeEvent = new EventEmitter();
   @Input() cityId : number = 0;
@@ -66,9 +69,8 @@ export class NotificationComponent implements OnInit {
     let model = new Notification(this.notificationForm.value);
     if(model){
       this.notificationService.createNotification(model).subscribe(res => {
-        if(res.success){
-          console.log(res.message);
-        }
+        this.showForm = false;
+        this.responseMsg = res.message;
       })
     }
   }

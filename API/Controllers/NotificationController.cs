@@ -44,7 +44,7 @@ namespace AirPurity.API.Controllers
             }
         }
 
-        [HttpPost("stop-notification")]
+        [HttpPost("stop")]
         public IActionResult StopNotification(string token)
         {
             if(Guid.TryParse(token, out Guid guid))

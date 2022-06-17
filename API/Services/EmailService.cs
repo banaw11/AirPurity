@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -60,7 +61,7 @@ namespace AirPurity.API.Services
 
             try
             {
-                await SendEmail(email, body, subject);
+                await SendEmail(subject, body, email);
                 return true;
             }
             catch(Exception)
@@ -77,6 +78,7 @@ namespace AirPurity.API.Services
                 mailMessage.Subject = subject;
                 mailMessage.Body = body;
                 mailMessage.IsBodyHtml = true;
+                mailMessage.BodyEncoding = Encoding.UTF8;
                 mailMessage.To.Add(new MailAddress(to));
 
                 SmtpClient smtpClient = new SmtpClient(_host, _port);

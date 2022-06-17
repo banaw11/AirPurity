@@ -9,7 +9,7 @@
     <nb-layout-column fxLayoutAlign="center start">
         <nb-card fxFlex.gt-xs="30" class="info-card" *ngIf="(busyService.isBusy$ |async) == false">
             <div class="label-box">
-                <label>Twoja subskrypcja powiadomień została zatrzymana</label>
+                <label>{{responseMsg}}</label>
             </div>
         </nb-card>
     </nb-layout-column>

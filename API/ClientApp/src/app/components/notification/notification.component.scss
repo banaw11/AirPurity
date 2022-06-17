@@ -255,3 +255,14 @@
     cursor: pointer;
     content: url(../../../assets/images/plus-outline.svg);
 }
+
+.msg{
+    align-self: center;
+    text-align: center;
+    width: 100%;
+}
+    
+.response-msg{
+    height: 100%;
+    display: flex;
+}

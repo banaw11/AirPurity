@@ -5,7 +5,7 @@
             <i class="close-icon" (click)="close()"></i>
         </div>
         <div class="modal-body" *ngIf="(busyService.isBusy$ |async) == false">
-            <div class="form-container">
+            <div class="form-container" *ngIf="showForm">
                 <form *ngIf="notificationForm" [formGroup]="notificationForm">
                     <input formControlName='cityId' type="hidden">
                     <input formControlName='stationId' type="hidden">
@@ -48,10 +48,13 @@
                     </div>
                 </form>
             </div>
+            <div class="response-msg">
+              <p>{{responseMsg}}</p>
+            </div>
         </div>
         <div class="modal-footer">
             <button nbButton outline class="no-btn" (click)="close()" >Anuluj</button>
-            <button nbButton outline class="yes-btn" (click)="create()" [disabled]="!notificationForm.valid" >Utwórz</button>
+            <button *ngIf="showForm" nbButton outline class="yes-btn" (click)="create()" [disabled]="!notificationForm.valid" >Utwórz</button>
         </div>
     </div>
 </div>

@@ -23,6 +23,7 @@ import { CustomDropdownComponent } from './modules/forms/custom-dropdown/custom-
 import { StopNotificationComponent } from './components/stop-notification/stop-notification.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { CustomInputComponent } from './modules/forms/custom-input/custom-input.component';
+import { EmailConfirmationComponent } from './components/email-confirmation/email-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { CustomInputComponent } from './modules/forms/custom-input/custom-input.
     CustomDropdownComponent,
     StopNotificationComponent,
     NotificationComponent,
-    CustomInputComponent
+    CustomInputComponent,
+    EmailConfirmationComponent
   ],
   imports: [
     BrowserModule,
