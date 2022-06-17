@@ -17,6 +17,7 @@ namespace AirPurity.API.Data
         public DbSet<Station> Stations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationSubject> NotificationSubjects { get; set; }
+        public DbSet<NotificationUser> NotificationUsers { get; set; }
 
     }
 }

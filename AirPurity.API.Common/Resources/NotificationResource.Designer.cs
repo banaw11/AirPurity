@@ -70,6 +70,42 @@ namespace AirPurity.API.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nie udało się stworzyć skubskrybcji. Spróbuj ponownie za chwilę lub skontaktuj się z administratorem.
+        /// </summary>
+        public static string ConfirmationEmailFailed {
+            get {
+                return ResourceManager.GetString("ConfirmationEmailFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Air Purity App : weryfikacja adresu email.
+        /// </summary>
+        public static string ConfirmationEmailSubject {
+            get {
+                return ResourceManager.GetString("ConfirmationEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Twój adres email został potwierdzony.
+        /// </summary>
+        public static string ConfirmationEmailSuccess {
+            get {
+                return ResourceManager.GetString("ConfirmationEmailSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subskrypcja została zapisana pomyślnie. Sprawdź skrzynkę pocztową, aby potwierdzić adres e-mail..
+        /// </summary>
+        public static string ConfirmEmailMessage {
+            get {
+                return ResourceManager.GetString("ConfirmEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Air Purity App : alert.
         /// </summary>
         public static string EmailSubject {
@@ -102,6 +138,15 @@ namespace AirPurity.API.Common.Resources {
         public static string StationState {
             get {
                 return ResourceManager.GetString("StationState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subskrypcja została utworzona poprawnie..
+        /// </summary>
+        public static string SubscriptionSuccessMessage {
+            get {
+                return ResourceManager.GetString("SubscriptionSuccessMessage", resourceCulture);
             }
         }
         
