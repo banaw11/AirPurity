@@ -61,11 +61,29 @@ namespace AirPurity.API.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zły.
+        /// </summary>
+        public static string Bad {
+            get {
+                return ResourceManager.GetString("Bad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Air Purity App : alert.
         /// </summary>
         public static string EmailSubject {
             get {
                 return ResourceManager.GetString("EmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobry.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
             }
         }
         
@@ -84,6 +102,42 @@ namespace AirPurity.API.Common.Resources {
         public static string StationState {
             get {
                 return ResourceManager.GetString("StationState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dostateczny.
+        /// </summary>
+        public static string Sufficient {
+            get {
+                return ResourceManager.GetString("Sufficient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Umiarkowany.
+        /// </summary>
+        public static string Temperate {
+            get {
+                return ResourceManager.GetString("Temperate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bardzo zły.
+        /// </summary>
+        public static string VeryBad {
+            get {
+                return ResourceManager.GetString("VeryBad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bardzo dobry.
+        /// </summary>
+        public static string VeryGood {
+            get {
+                return ResourceManager.GetString("VeryGood", resourceCulture);
             }
         }
     }

@@ -1,7 +1,7 @@
 <nb-layout *ngIf="(busyService.isBusy$ |async) == false">
     <nb-layout-header>
-        <div fxFlex="100">
-            <nb-actions fxHide.gt-xs>
+        <div fxFlex="100" class="header">
+            <nb-actions class="header-actions" fxHide.gt-xs>
                 <nb-action icon="arrow-circle-left-outline" (click)="backToCity()"></nb-action>
                 
                 <nb-action *ngIf="(stationService.station$ |async)?.stationState" fxLayoutAlign="center center" fxLayoutGap="2px" fxLayout.xs="column">
@@ -12,6 +12,10 @@
                         : (stationService.station$ |async)?.stationState.stIndexLevel.id < 5 ? "warning" : "danger"'>
                             {{(stationService.station$ |async)?.stationState.stIndexLevel.indexLevelName}}
                     </button>
+                    
+                </nb-action>
+                <nb-action>
+                    <i class="bell-outline" (click)="showNotificationWindow()" title="Utwórz notyfikacje"></i>
                 </nb-action>
             </nb-actions>
             <nb-actions fxHide.xs>
@@ -25,7 +29,12 @@
                             {{(stationService.station$ |async)?.stationState.stIndexLevel.indexLevelName}}
                     </button>
                 </nb-action>
+                <nb-action>
+                    <i class="bell-outline" (click)="showNotificationWindow()"></i>
+                    <label class="label">Utwórz notyfikacje</label>
+                </nb-action>
             </nb-actions>
+            
         </div> 
     </nb-layout-header>
     <nb-layout-column>

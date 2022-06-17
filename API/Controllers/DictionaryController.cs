@@ -57,5 +57,15 @@ namespace AirPurity.API.Controllers
 
             return Ok(responseModel);
         }
+
+        [HttpGet("index-levels")]
+        public IActionResult GetIndexLevels()
+        {
+            var levels = _dictionaryService.GetIndexLevels();
+
+            var responseModel = new ResponseModel(data: levels);
+
+            return Ok(responseModel);
+        }
     }
 }

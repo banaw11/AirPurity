@@ -20,6 +20,9 @@ import { HomeComponent } from './components/home/home.component';
 import { StationComponent } from './components/station/station.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { CustomDropdownComponent } from './modules/forms/custom-dropdown/custom-dropdown.component';
+import { StopNotificationComponent } from './components/stop-notification/stop-notification.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { CustomInputComponent } from './modules/forms/custom-input/custom-input.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { CustomDropdownComponent } from './modules/forms/custom-dropdown/custom-
     PmMeasuresChartComponent,
     HomeComponent,
     StationComponent,
-    CustomDropdownComponent
+    CustomDropdownComponent,
+    StopNotificationComponent,
+    NotificationComponent,
+    CustomInputComponent
   ],
   imports: [
     BrowserModule,

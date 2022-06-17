@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { DictionaryModel } from '../models/dictionaryModel';
 import { Measure } from '../models/measure';
 import { Norm } from '../models/norm';
 import { SensorsDataQuery } from '../models/QueryParams/sensorsData-query';
@@ -80,5 +82,19 @@ export class SensorService {
 
   getPM25Data():Measure[]{
     return this.stationDataSource.value.find(x => x.paramCode == "PM2.5") ? this.stationDataSource.value.find(x => x.paramCode == "PM2.5").values : [];
+  }
+
+  getParams() : Observable<DictionaryModel[]>{
+    let dictionary: DictionaryModel[] = [];
+    this.stationDataSource.value.forEach(x => {
+      if(x.paramCode !== "C6H6"){
+        dictionary.push({value: x.paramCode, name:x.paramCode})
+      }
+    });
+
+    return new Observable<DictionaryModel[]>(sub => {
+      sub.next(dictionary);
+      sub.complete();
+    })
   }
 }
