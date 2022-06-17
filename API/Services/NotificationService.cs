@@ -47,7 +47,10 @@ namespace AirPurity.API.Services
                 if(user != null)
                 {
                     isEmailConfirmed = user.IsEmailConfirmed;
-                    var existedNotification = user.Notifications.FirstOrDefault(x => x.StationId == notification.StationId);
+                    var existedNotification = _notificationRepository
+                        .FindAll(x => x.NotificationUser.Id == user.Id && x.StationId == notification.StationId, x => x.NotificationSubjects)
+                        .FirstOrDefault();
+
                     if(existedNotification != null)
                     {
                         existedNotification.IndexLevelId = notification.IndexLevelId;
@@ -79,7 +82,7 @@ namespace AirPurity.API.Services
                     {
                         UserEmail = email,
                         IsActive = true,
-                        IsEmailConfirmed = true,
+                        IsEmailConfirmed = false,
                         Notifications = new List<Notification>() { notification }
                     };
                     
@@ -206,11 +209,11 @@ namespace AirPurity.API.Services
         {
             if(notification != null && stationState != null)
             {
-                var notificationTemplateModel = new NotificationTemplateModel();
+                var notificationTemplateModel = new NotificationTemplateModel() { SubNotificationTemplates = new List<SubNotificationTemplateModel>()};
 
                 if (notification.IndexLevelId.HasValue)
                 {
-                    if(notification.IndexLevelId.Value >= stationState.StIndexLevel?.Id &&
+                    if(notification.IndexLevelId.Value <= stationState.StIndexLevel?.Id &&
                         (notification.LastIndexLevelId.HasValue == false || stationState.StIndexLevel?.Id != notification.LastIndexLevelId.Value))
                     {
                         notificationTemplateModel.StationIndexLevelName = stationState.StIndexLevel.IndexLevelName;

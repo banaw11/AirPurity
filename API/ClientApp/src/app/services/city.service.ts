@@ -38,6 +38,9 @@ export class CityService {
   });
   
   }
+  getCurrentCityId(){
+    return this.citySource.value.id;
+  }
 }
 
 

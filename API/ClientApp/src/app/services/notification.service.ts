@@ -4,6 +4,7 @@ import { Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { NotificationComponent } from '../components/notification/notification.component';
+import { Notification } from '../models/notification';
 import { ResponseModel } from '../models/responseModel';
 
 @Injectable({
@@ -16,13 +17,24 @@ export class NotificationService {
 
   constructor(private http: HttpClient, private resolver: ComponentFactoryResolver) { }
 
-  stopNotification(email: string){
-    this.http.post(this.apiUrl + "Notification/delete?email=" + email, {}).subscribe();
+  stopNotification(token: string){
+    this.http.post(this.apiUrl + "Notification/stop?token=" + token, {}).subscribe();
   }
 
-  showCreateNotificationModal(entry: ViewContainerRef){
+  confirmEmail(token: string){
+    return this.http.post(this.apiUrl + "Notification/email-confirmation?token=" + token, {}).pipe(
+      map((response : ResponseModel) => {
+          return response;
+      })
+      ,catchError(err => throwError(err))
+    )
+  }
+
+  showCreateNotificationModal(entry: ViewContainerRef, stationId: number, cityId: number){
     let factory = this.resolver.resolveComponentFactory(NotificationComponent);
     this.cmpRef = entry.createComponent(factory);
+    this.cmpRef.instance.cityId = cityId;
+    this.cmpRef.instance.stationId = stationId;
     this.cmpRef.instance.closeEvent.subscribe(() => this.closeModal());
     this.cmpSubscriber = new Subject<boolean>();
     return this.cmpSubscriber.asObservable();

@@ -52,6 +52,7 @@ namespace AirPurity.API.Repositories.Repositories
                 user.StopNotificationToken = Guid.NewGuid();
 
                 Update(user);
+                SaveChanges();
                 return true;
             }
 
@@ -60,11 +61,7 @@ namespace AirPurity.API.Repositories.Repositories
 
         public NotificationUser GetByEmail(string email)
         {
-            return _context.NotificationUsers.Where(x => x.UserEmail == email)
-                .Include(x => x.Notifications)
-                .ThenInclude(x => x)
-                .ThenInclude(x => x.NotificationSubjects)
-                .FirstOrDefault();
+            return _context.NotificationUsers.Where(x => x.UserEmail == email).FirstOrDefault();
         }
 
     }

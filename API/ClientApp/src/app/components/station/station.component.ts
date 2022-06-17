@@ -5,6 +5,7 @@ import { AppComponent } from 'src/app/app.component';
 import { Range } from 'src/app/models/QueryParams/Range';
 import { SensorsDataQuery } from 'src/app/models/QueryParams/sensorsData-query';
 import { BusyService } from 'src/app/services/busy.service';
+import { CityService } from 'src/app/services/city.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { OnlineClientService } from 'src/app/services/online-client.service';
 import { SensorService } from 'src/app/services/sensor.service';
@@ -22,7 +23,7 @@ export class StationComponent implements OnInit, OnDestroy {
 
 
   constructor(public stationService: StationService, public sensorService: SensorService, private onlineService: OnlineClientService, private router: Router,
-     private route: ActivatedRoute, public busyService: BusyService, private notifiactionService : NotificationService, private injector : Injector) {
+     private route: ActivatedRoute, public busyService: BusyService, private notifiactionService : NotificationService, private injector : Injector, private cityService: CityService) {
       this.sub = this.route.queryParams.subscribe(params => {
          this.stationId = + params['id'];
          this.cityName =  params['city'];
@@ -46,7 +47,8 @@ export class StationComponent implements OnInit, OnDestroy {
   }
 
   showNotificationWindow = () => {
-    this.notifiactionService.showCreateNotificationModal(this.injector.get(AppComponent).wraper).subscribe(res => console.log(res));
+    let cityId = this.cityService.getCurrentCityId();
+    this.notifiactionService.showCreateNotificationModal(this.injector.get(AppComponent).wraper, this.stationId, cityId).subscribe(res => console.log(res));
   }
 
 }
