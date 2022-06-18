@@ -1,6 +1,6 @@
 ﻿namespace AirPurity.API.Data.Entities
 {
-    public class BaseModel
+    public abstract class BaseModel
     {
         public int Id { get; set; }
     }
