@@ -67,7 +67,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<OnlineClientHub>("hubs/online");
-               // endpoints.MapFallbackToController("index","Fallback");
+                endpoints.MapFallbackToController("index","Fallback");
             });
 
             app.UseSpa(spa =>
