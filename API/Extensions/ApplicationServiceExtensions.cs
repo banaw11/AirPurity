@@ -71,8 +71,7 @@ namespace API.Extensions
                 else
                 {
                     // Use connection string provided at runtime by Heroku.
-                    //var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-                    var connUrl = "postgres://hwdakqkgjtkvxm:a0280486e486caa383cdfc8718d37f4ca41126ef91e4778b58dd07eb677fabbd@ec2-3-248-121-12.eu-west-1.compute.amazonaws.com:5432/da7r7m58t5c2ra";
+                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
                     // Parse connection URL to connection string for Npgsql
                     connUrl = connUrl.Replace("postgres://", string.Empty);
