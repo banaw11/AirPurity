@@ -72,11 +72,11 @@ namespace API
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "wwwroot";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
-                    //spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseAngularCliServer(npmScript: "start");
                 }
             });
             
