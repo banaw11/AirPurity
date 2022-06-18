@@ -1,12 +1,12 @@
 # AirPurity
 Web application with measures of quality air. 
 </br>Data are getting from external API https://powietrze.gios.gov.pl/pjp/content/api
-</br>Application is in polish langueage and was created for recruitment purposes
+</br>Application is in polish langueage
 
 ## Technologies :
 
 #### API : 
-- .Net Core 5
+- .Net 6
 - ASP .NET Core
 - HttpClient
 - Entity Framework
