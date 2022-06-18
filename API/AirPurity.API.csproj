@@ -20,8 +20,6 @@
 
 	<ItemGroup>
 	  <Content Remove="wwwroot\3rdpartylicenses.txt" />
-	  <Content Remove="wwwroot\assets\images\bell-outline.svg" />
-	  <Content Remove="wwwroot\assets\images\plus-outline.svg" />
 	  <Content Remove="wwwroot\bell-outline.2ef4ba66dc6f11aa70be.svg" />
 	  <Content Remove="wwwroot\favicon.ico" />
 	  <Content Remove="wwwroot\index.html" />
@@ -34,22 +32,33 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="wwwroot\assets\images\bell-outline.svg" />
-	  <_ContentIncludedByDefault Remove="wwwroot\assets\images\plus-outline.svg" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="wwwroot\3rdpartylicenses.txt" />
-	  <None Include="wwwroot\assets\images\bell-outline.svg" />
-	  <None Include="wwwroot\assets\images\plus-outline.svg" />
-	  <None Include="wwwroot\bell-outline.2ef4ba66dc6f11aa70be.svg" />
-	  <None Include="wwwroot\favicon.ico" />
-	  <None Include="wwwroot\index.html" />
-	  <None Include="wwwroot\main.bfe84c6630a1035a2543.js" />
-	  <None Include="wwwroot\plus-outline.1e773195cb346c9121ce.svg" />
-	  <None Include="wwwroot\polyfills.94daefd414b8355106ab.js" />
-	  <None Include="wwwroot\runtime.7b63b9fd40098a2e8207.js" />
-	  <None Include="wwwroot\styles.b1c614f48fec4fb05839.css" />
+	  <None Include="wwwroot\3rdpartylicenses.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\bell-outline.2ef4ba66dc6f11aa70be.svg">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\favicon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\index.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\main.bfe84c6630a1035a2543.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\plus-outline.1e773195cb346c9121ce.svg">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\polyfills.94daefd414b8355106ab.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\runtime.7b63b9fd40098a2e8207.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="wwwroot\styles.b1c614f48fec4fb05839.css">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
   <ItemGroup>
