@@ -23,10 +23,6 @@ namespace AirPurity.API.QuartzCore
                 {
                     var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
                     var notificationThread = notificationService.StartNotificationThread();
-                    if (!notificationThread.IsCompleted)
-                    {
-                        notificationThread.Start();
-                    }
                 }
                 catch (Exception)
                 {

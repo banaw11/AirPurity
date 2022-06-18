@@ -29,7 +29,7 @@ namespace AirPurity.API.Services
         {
             var smtpConfiguration = configuration.GetSection("SmtpSettings");
             _username = smtpConfiguration.GetValue<string>("Username");
-            _password = smtpConfiguration.GetValue<string>("Password");
+            _password = Environment.GetEnvironmentVariable("SMTP_Password");
             _host = smtpConfiguration.GetValue<string>("Host");
             _port = smtpConfiguration.GetValue<int>("Port");
             _enableSsl = smtpConfiguration.GetValue<bool>("EnableSsl");
@@ -38,36 +38,45 @@ namespace AirPurity.API.Services
 
         public void SendEmails(List<EmailTemplateModel> emailTemplateModels)
         {
-            foreach (var model in emailTemplateModels)
+            if (!string.IsNullOrEmpty(_password))
             {
-                string body = CreateNotifiactionBody(model);
-
-                try
+                foreach (var model in emailTemplateModels)
                 {
-                    Task.Run(async () => await SendEmail(model.Subject, body, model.Email));
-                }
-                catch (Exception ex)
-                {
+                    string body = CreateNotifiactionBody(model);
+
+                    try
+                    {
+                        Task.Run(async () => await SendEmail(model.Subject, body, model.Email));
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
 
                 }
-                
             }
         }
 
         public async Task<bool> SendConfirmationEmail(string email, string callbackUrl)
         {
-            string body = CreateEmailConfirmationBody(callbackUrl);
-            string subject = NotificationResource.ConfirmationEmailSubject;
+            if (!string.IsNullOrEmpty(_password))
+            {
+                string body = CreateEmailConfirmationBody(callbackUrl);
+                string subject = NotificationResource.ConfirmationEmailSubject;
 
-            try
-            {
-                await SendEmail(subject, body, email);
-                return true;
+                try
+                {
+                    await SendEmail(subject, body, email);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
-            catch(Exception)
-            {
-                return false;
-            }
+
+            return false;
+            
         }
 
         private async Task SendEmail(string subject, string body, string to)
@@ -82,13 +91,13 @@ namespace AirPurity.API.Services
                 mailMessage.To.Add(new MailAddress(to));
 
                 SmtpClient smtpClient = new SmtpClient(_host, _port);
-                smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 
 
                 NetworkCredential credential = new NetworkCredential(_username, _password);
                 smtpClient.Credentials = credential;
+                smtpClient.EnableSsl = true;
                 var cred = smtpClient.Credentials.Equals(credential);
 
                 try

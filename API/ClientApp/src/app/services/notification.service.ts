@@ -12,8 +12,6 @@ import { ResponseModel } from '../models/responseModel';
 })
 export class NotificationService {
   apiUrl = environment.apiUrl;
-  private cmpRef!: ComponentRef<NotificationComponent>;
-  private cmpSubscriber!: Subject<boolean>;
 
   constructor(private http: HttpClient, private resolver: ComponentFactoryResolver) { }
 
@@ -29,22 +27,6 @@ export class NotificationService {
       ,catchError(err => throwError(err))
     )
   }
-
-  showCreateNotificationModal(entry: ViewContainerRef, stationId: number, cityId: number){
-    let factory = this.resolver.resolveComponentFactory(NotificationComponent);
-    this.cmpRef = entry.createComponent(factory);
-    this.cmpRef.instance.cityId = cityId;
-    this.cmpRef.instance.stationId = stationId;
-    this.cmpRef.instance.closeEvent.subscribe(() => this.closeModal());
-    this.cmpSubscriber = new Subject<boolean>();
-    return this.cmpSubscriber.asObservable();
-  }
-
-  private closeModal(){
-    this.cmpSubscriber.next(false);
-    this.cmpSubscriber.complete();
-    this.cmpRef.destroy();
-   }
 
    createNotification(model: Notification){
     return this.http.post(this.apiUrl + "Notification/create", model)

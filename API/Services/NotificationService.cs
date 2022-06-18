@@ -24,16 +24,19 @@ namespace AirPurity.API.Services
         private readonly StationRepository _stationRepository;
         private readonly EmailService _emailService;
         private readonly NotificationUserRepository _notificationUserRepository;
+        private readonly CityRepository _cityRepository;
         private IConfigurationSection _hostConfig;
 
         public NotificationService(NotificationRepository notificationRepository, GiosHttpClientService giosHttpClientService,
-            StationRepository stationRepository, IConfiguration configuration, EmailService emailService, NotificationUserRepository notificationUserRepository)
+            StationRepository stationRepository, IConfiguration configuration, EmailService emailService, NotificationUserRepository notificationUserRepository
+            ,CityRepository cityRepository)
         {
             _notificationRepository = notificationRepository;
             _giosHttpClientService = giosHttpClientService;
             _stationRepository = stationRepository;
             _emailService = emailService;
             _notificationUserRepository = notificationUserRepository;
+            _cityRepository = cityRepository;
             _hostConfig = configuration.GetRequiredSection("HostConfig");
         }
 
@@ -43,6 +46,7 @@ namespace AirPurity.API.Services
 
             if(notification != null)
             {
+                notification.CityId = _stationRepository.GetById(notification.StationId)?.CityId ?? 0;
                 var user = _notificationUserRepository.GetByEmail(email);
                 if(user != null)
                 {
@@ -96,7 +100,7 @@ namespace AirPurity.API.Services
         public IEnumerable<Notification> GetAll()
         {
             var notifications = _notificationRepository
-                .GetAll(x => x.NotificationSubjects, x => x.NotificationUser )
+                .GetAll(x => x.NotificationSubjects, x => x.NotificationUser, x => x.Station)
                 .Where(x => x.NotificationUser.IsActive && x.NotificationUser.IsEmailConfirmed);
 
             return notifications;
@@ -139,9 +143,8 @@ namespace AirPurity.API.Services
 
             if (notifications.Any())
             {
-                var task = Task.Run(async () => await NotificationThread(notifications));
-
-                return task;
+                NotificationThread(notifications).Wait();
+                _notificationRepository.SaveChanges();
             }
             return Task.CompletedTask;
         }
@@ -239,9 +242,11 @@ namespace AirPurity.API.Services
                 if(!string.IsNullOrEmpty(notificationTemplateModel.StationIndexLevelName) || 
                     notificationTemplateModel.SubNotificationTemplates.Any())
                 {
-                    notificationTemplateModel.StationName = _stationRepository.GetById(notification.StationId)?.StationName;
+                    notificationTemplateModel.StationName = notification.Station.StationName;
                     emailTemplateModel.Notifications.Add(notificationTemplateModel);
                 }
+
+                _notificationRepository.Update(notification);
             }
         }
 
